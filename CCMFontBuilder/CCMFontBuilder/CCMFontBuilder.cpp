@@ -1,7 +1,4 @@
-﻿// CCMFontBuilder.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <iostream>
 #include <wingdi.h>
 #include "Debug/Debug.h"
@@ -19,25 +16,30 @@ int main()
 
     int nHeight = -MulDiv(fontSize, nDPI, 72);
 
+    Debug::DebuggerMessage(Debug::LVL_INFO, "Create font %ls\n", FONTNAME_W);
     HFONT font = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, FONTNAME_W);
 
     if (font == 0)
+    {
+        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder.cpp", "Failed to create font\n");
+
         return 0;
+    }
 
     HFONT hOldFont = (HFONT)SelectObject(hdc, font);
 
     TEXTMETRICW tm;
     GetTextMetricsW(hdc, &tm);
 
-    printf("Text Metrics:\n");
-    printf("  Height of character: %d\n", tm.tmHeight);
-    printf("  Average width of character: %d\n", tm.tmAveCharWidth);
-    printf("  Maximum width of character: %d\n", tm.tmMaxCharWidth);
-    printf("  Height of font: %d\n", tm.tmHeight);
-    printf("  Ascent: %d\n", tm.tmAscent);
-    printf("  Descent: %d\n", tm.tmDescent);
-    printf("  Internal leading: %d\n", tm.tmInternalLeading);
-    printf("  External leading: %d\n", tm.tmExternalLeading);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "Text Metrics:\n");
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Height of character: %d\n", tm.tmHeight);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Average width of character: %d\n", tm.tmAveCharWidth);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Maximum width of character: %d\n", tm.tmMaxCharWidth);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Height of font: %d\n", tm.tmHeight);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Ascent: %d\n", tm.tmAscent);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Descent: %d\n", tm.tmDescent);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  Internal leading: %d\n", tm.tmInternalLeading);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "  External leading: %d\n", tm.tmExternalLeading);
 
     bool done = false;
     while (!done)
