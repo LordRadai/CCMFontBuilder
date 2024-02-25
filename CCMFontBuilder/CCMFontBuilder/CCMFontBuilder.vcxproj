@@ -128,10 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CCMFontBuilder.cpp" />
-    <ClCompile Include="Debug\Debug.cpp" />
+    <ClCompile Include="DebugOutput\DebugOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Debug\Debug.h" />
+    <ClInclude Include="DebugOutput\DebugOutput.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

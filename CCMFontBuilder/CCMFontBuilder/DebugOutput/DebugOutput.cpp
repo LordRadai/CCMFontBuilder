@@ -1,4 +1,4 @@
-#include "Debug.h"
+#include "DebugOutput.h"
 
 void Debug::DebuggerMessage(MsgLevel level, const char* fmt, ...)
 {

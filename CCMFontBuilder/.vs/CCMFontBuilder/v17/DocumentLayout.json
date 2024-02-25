@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\DebugOutput\\DebugOutput.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|solutionrelative:CCMFontBuilder\\DebugOutput\\DebugOutput.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|solutionrelative:CCMFontBuilder\\CCMFontBuilder.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\Debug\\Debug.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|solutionrelative:CCMFontBuilder\\Debug\\Debug.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\Debug\\Debug.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|solutionrelative:CCMFontBuilder\\Debug\\Debug.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\DebugOutput\\DebugOutput.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{29B0C849-06C2-412C-A34E-84654133F8B7}|CCMFontBuilder\\CCMFontBuilder.vcxproj|solutionrelative:CCMFontBuilder\\DebugOutput\\DebugOutput.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,12 +30,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Debug.cpp",
-              "DocumentMoniker": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\Debug\\Debug.cpp",
-              "RelativeDocumentMoniker": "CCMFontBuilder\\Debug\\Debug.cpp",
-              "ToolTip": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\Debug\\Debug.cpp",
-              "RelativeToolTip": "CCMFontBuilder\\Debug\\Debug.cpp",
+              "DocumentIndex": 0,
+              "Title": "DebugOutput.cpp",
+              "DocumentMoniker": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\DebugOutput\\DebugOutput.cpp",
+              "RelativeDocumentMoniker": "CCMFontBuilder\\DebugOutput\\DebugOutput.cpp",
+              "ToolTip": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\DebugOutput\\DebugOutput.cpp",
+              "RelativeToolTip": "CCMFontBuilder\\DebugOutput\\DebugOutput.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-02-25T22:12:34.335Z",
@@ -44,11 +44,11 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Debug.h",
-              "DocumentMoniker": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\Debug\\Debug.h",
-              "RelativeDocumentMoniker": "CCMFontBuilder\\Debug\\Debug.h",
-              "ToolTip": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\Debug\\Debug.h",
-              "RelativeToolTip": "CCMFontBuilder\\Debug\\Debug.h",
+              "Title": "DebugOutput.h",
+              "DocumentMoniker": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\DebugOutput\\DebugOutput.h",
+              "RelativeDocumentMoniker": "CCMFontBuilder\\DebugOutput\\DebugOutput.h",
+              "ToolTip": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\DebugOutput\\DebugOutput.h",
+              "RelativeToolTip": "CCMFontBuilder\\DebugOutput\\DebugOutput.h",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-02-25T22:12:32.064Z",
@@ -56,13 +56,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "CCMFontBuilder.cpp",
               "DocumentMoniker": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder.cpp",
               "RelativeDocumentMoniker": "CCMFontBuilder\\CCMFontBuilder.cpp",
               "ToolTip": "G:\\GitHub\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder\\CCMFontBuilder.cpp",
               "RelativeToolTip": "CCMFontBuilder\\CCMFontBuilder.cpp",
-              "ViewState": "AQIAABIAAAAAAAAAAAAAACoAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-02-25T17:45:41.873Z",
               "EditorCaption": ""

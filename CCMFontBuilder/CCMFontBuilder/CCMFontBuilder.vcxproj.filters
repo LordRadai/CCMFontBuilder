@@ -18,12 +18,12 @@
     <ClCompile Include="CCMFontBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\Debug.cpp">
+    <ClCompile Include="DebugOutput\DebugOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Debug\Debug.h">
+    <ClInclude Include="DebugOutput\DebugOutput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
