@@ -15,7 +15,7 @@ void PrintTextMetrics(TEXTMETRICW tm)
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tAscent: %d\n", tm.tmAscent);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tDescent: %d\n", tm.tmDescent);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tInternal leading: %d\n", tm.tmInternalLeading);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n", tm.tmExternalLeading);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n\n", tm.tmExternalLeading);
 }
 
 void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
@@ -24,7 +24,16 @@ void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tWidth: %ld\n", gm.gmBlackBoxX);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight: %ld\n", gm.gmBlackBoxY);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tTop side bearing: %ld\n", gm.gmptGlyphOrigin.y);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
+}
+
+void IdentityMat(MAT2* mat)
+{
+    mat->eM11.value = 1;
+    mat->eM12.value = 0;
+
+    mat->eM21.value = 0;
+    mat->eM22.value = 1;
 }
 
 int main()
@@ -65,21 +74,16 @@ int main()
         {
             GLYPHMETRICS gm;
             MAT2 pos;
+            IdentityMat(&pos);
 
-            DWORD dwGlyphSize = GetGlyphOutlineW(hdc, glyphIndex, GGO_METRICS, &gm, 0, NULL, &pos);
+            DWORD dwGlyphSize = GetGlyphOutlineW(hdc, glyphIndex, GGO_GLYPH_INDEX | GGO_METRICS, &gm, 0, NULL, &pos);
             if (dwGlyphSize != GDI_ERROR) 
-            {
                 PrintGlyphMetrics(gm, unicodeChar);
-            }
             else 
-            {
                 Debug::DebuggerMessage(Debug::LVL_ERROR, "Failed to retrieve glyph metrics for Unicode character U+%04X.\n", unicodeChar);
-            }
         }
         else 
-        {
             Debug::DebuggerMessage(Debug::LVL_ERROR, "Failed to convert Unicode character U+%04X to glyph index.\n", unicodeChar);
-        }
     }
 
     bool done = false;
