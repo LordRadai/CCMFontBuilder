@@ -1,7 +1,7 @@
 ﻿#include <Windows.h>
 #include <iostream>
 #include <wingdi.h>
-#include "Debug/Debug.h"
+#include "DebugOutput/DebugOutput.h"
 
 #define FONTNAME_W L"MS Gothic"
 
@@ -32,14 +32,14 @@ int main()
     GetTextMetricsW(hdc, &tm);
 
     Debug::DebuggerMessage(Debug::LVL_INFO, "Text Metrics:\n");
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Height of character: %d\n", tm.tmHeight);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Average width of character: %d\n", tm.tmAveCharWidth);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Maximum width of character: %d\n", tm.tmMaxCharWidth);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Height of font: %d\n", tm.tmHeight);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Ascent: %d\n", tm.tmAscent);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Descent: %d\n", tm.tmDescent);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  Internal leading: %d\n", tm.tmInternalLeading);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "  External leading: %d\n", tm.tmExternalLeading);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of character: %d\n", tm.tmHeight);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAverage width of character: %d\n", tm.tmAveCharWidth);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of font: %d\n", tm.tmHeight);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAscent: %d\n", tm.tmAscent);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tDescent: %d\n", tm.tmDescent);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tInternal leading: %d\n", tm.tmInternalLeading);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n", tm.tmExternalLeading);
 
     bool done = false;
     while (!done)
