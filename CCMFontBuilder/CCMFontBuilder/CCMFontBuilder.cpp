@@ -58,13 +58,15 @@ int main()
     WCHAR startChar = 0x0000; // Start character
     WCHAR endChar = 0xFFFF;   // End character
 
-    for (WCHAR unicodeChar = startChar; unicodeChar <= endChar; unicodeChar++) 
+    for (WCHAR unicodeChar = startChar; unicodeChar < endChar; unicodeChar++) 
     {
         WORD glyphIndex = 0;
-        if (GetGlyphIndicesW(hdc, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS) != GDI_ERROR) {
-            // Get the glyph data
+        if (GetGlyphIndicesW(hdc, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS) != GDI_ERROR) 
+        {
             GLYPHMETRICS gm;
-            DWORD dwGlyphSize = GetGlyphOutlineW(hdc, glyphIndex, GGO_METRICS, &gm, 0, NULL, NULL);
+            MAT2 pos;
+
+            DWORD dwGlyphSize = GetGlyphOutlineW(hdc, glyphIndex, GGO_METRICS, &gm, 0, NULL, &pos);
             if (dwGlyphSize != GDI_ERROR) 
             {
                 PrintGlyphMetrics(gm, unicodeChar);
