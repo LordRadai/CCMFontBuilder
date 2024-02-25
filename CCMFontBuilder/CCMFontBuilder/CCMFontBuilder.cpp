@@ -5,9 +5,31 @@
 
 #define FONTNAME_W L"MS Gothic"
 
+void PrintTextMetrics(TEXTMETRICW tm)
+{
+    Debug::DebuggerMessage(Debug::LVL_INFO, "Text Metrics:\n");
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of character: %d\n", tm.tmHeight);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAverage width of character: %d\n", tm.tmAveCharWidth);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of font: %d\n", tm.tmHeight);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAscent: %d\n", tm.tmAscent);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tDescent: %d\n", tm.tmDescent);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tInternal leading: %d\n", tm.tmInternalLeading);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n", tm.tmExternalLeading);
+}
+
+void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
+{
+    Debug::DebuggerMessage(Debug::LVL_INFO, "Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tWidth: %ld\n", gm.gmBlackBoxX);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight: %ld\n", gm.gmBlackBoxY);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
+    Debug::DebuggerMessage(Debug::LVL_INFO, "\tTop side bearing: %ld\n", gm.gmptGlyphOrigin.y);
+}
+
 int main()
 {
-    HDC hdc = GetDC(NULL);
+    HDC hdc = GetDC(GetActiveWindow());
     int nDPI = GetDeviceCaps(hdc, LOGPIXELSY);
 
     int italic = 0;
@@ -31,15 +53,32 @@ int main()
     TEXTMETRICW tm;
     GetTextMetricsW(hdc, &tm);
 
-    Debug::DebuggerMessage(Debug::LVL_INFO, "Text Metrics:\n");
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of character: %d\n", tm.tmHeight);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAverage width of character: %d\n", tm.tmAveCharWidth);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of font: %d\n", tm.tmHeight);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAscent: %d\n", tm.tmAscent);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tDescent: %d\n", tm.tmDescent);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tInternal leading: %d\n", tm.tmInternalLeading);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n", tm.tmExternalLeading);
+    PrintTextMetrics(tm);
+
+    WCHAR startChar = 0x0000; // Start character
+    WCHAR endChar = 0xFFFF;   // End character
+
+    for (WCHAR unicodeChar = startChar; unicodeChar <= endChar; unicodeChar++) 
+    {
+        WORD glyphIndex = 0;
+        if (GetGlyphIndicesW(hdc, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS) != GDI_ERROR) {
+            // Get the glyph data
+            GLYPHMETRICS gm;
+            DWORD dwGlyphSize = GetGlyphOutlineW(hdc, glyphIndex, GGO_METRICS, &gm, 0, NULL, NULL);
+            if (dwGlyphSize != GDI_ERROR) 
+            {
+                PrintGlyphMetrics(gm, unicodeChar);
+            }
+            else 
+            {
+                Debug::DebuggerMessage(Debug::LVL_ERROR, "Failed to retrieve glyph metrics for Unicode character U+%04X.\n", unicodeChar);
+            }
+        }
+        else 
+        {
+            Debug::DebuggerMessage(Debug::LVL_ERROR, "Failed to convert Unicode character U+%04X to glyph index.\n", unicodeChar);
+        }
+    }
 
     bool done = false;
     while (!done)
