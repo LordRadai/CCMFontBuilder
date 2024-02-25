@@ -4,6 +4,8 @@
 #include <Windows.h>
 #include <iostream>
 #include <wingdi.h>
+#include "Debug/Debug.h"
+
 #define FONTNAME_W L"MS Gothic"
 
 int main()
