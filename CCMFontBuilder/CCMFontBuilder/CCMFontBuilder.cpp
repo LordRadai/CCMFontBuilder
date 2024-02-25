@@ -1,6 +1,8 @@
 ﻿#include <Windows.h>
 #include <iostream>
 #include <wingdi.h>
+#include <fstream>
+
 #include "DebugOutput/DebugOutput.h"
 
 #define FONTNAME_W L"MS Gothic"
@@ -18,6 +20,10 @@ void PrintTextMetrics(TEXTMETRICW tm)
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n\n", tm.tmExternalLeading);
 }
 
+void WriteTextMetrics(std::ofstream* pOut, TEXTMETRICW tm)
+{
+}
+
 void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
 {
     Debug::DebuggerMessage(Debug::LVL_INFO, "Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
@@ -25,6 +31,10 @@ void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight: %ld\n", gm.gmBlackBoxY);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
+}
+
+void WriteGlyphMetrics(std::ofstream* pOut, GLYPHMETRICS gm, WCHAR unicodeChar)
+{
 }
 
 void IdentityMat(MAT2* mat)
@@ -89,6 +99,17 @@ int main()
     bool done = false;
     while (!done)
     {
-        TextOut(hdc, 0, 0, L"Hello, World!", lstrlenW(L"Hello, world!"));
+        int xPos = 10, yPos = 10;
+
+        for (WCHAR unicodeChar = startChar; unicodeChar < endChar; unicodeChar++)
+        {
+            WCHAR str[2] = { unicodeChar, '\0' };
+            TextOutW(hdc, xPos, yPos, str, 1);
+            xPos += 20;
+            if (xPos > 600) {
+                xPos = 10;
+                yPos += 30;
+            }
+        }
     }
 }
