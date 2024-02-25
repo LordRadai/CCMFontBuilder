@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <wingdi.h>
+#define FONTNAME_W L"MS Gothic"
 
 int main()
 {
@@ -16,7 +17,7 @@ int main()
 
     int nHeight = -MulDiv(fontSize, nDPI, 72);
 
-    HFONT font = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, L"MS Gothic");
+    HFONT font = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, FONTNAME_W);
 
     if (font == 0)
         return 0;
