@@ -6,6 +6,12 @@
 #include "DebugOutput/DebugOutput.h"
 
 #define FONTNAME_W L"MS Gothic"
+#define FILENAME_W L"MSGothic"
+
+const int TEXTURE_SIZE = 512;
+const int FONT_SIZE = 14;
+const int WEIGHT = FW_NORMAL;
+const bool ITALIC = false;
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
@@ -20,10 +26,6 @@ void PrintTextMetrics(TEXTMETRICW tm)
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n\n", tm.tmExternalLeading);
 }
 
-void WriteTextMetrics(std::ofstream* pOut, TEXTMETRICW tm)
-{
-}
-
 void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
 {
     Debug::DebuggerMessage(Debug::LVL_INFO, "Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
@@ -31,10 +33,6 @@ void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight: %ld\n", gm.gmBlackBoxY);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
     Debug::DebuggerMessage(Debug::LVL_INFO, "\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
-}
-
-void WriteGlyphMetrics(std::ofstream* pOut, GLYPHMETRICS gm, WCHAR unicodeChar)
-{
 }
 
 void IdentityMat(MAT2* mat)
@@ -46,70 +44,133 @@ void IdentityMat(MAT2* mat)
     mat->eM22.value = 1;
 }
 
-int main()
+void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar)
 {
-    HDC hdc = GetDC(GetActiveWindow());
+    // Create a compatible DIB section
+    BITMAPINFO bmi = { 0 };
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = TEXTURE_SIZE;
+    bmi.bmiHeader.biHeight = TEXTURE_SIZE;
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 24;
+    bmi.bmiHeader.biCompression = BI_RGB;
+
+    HDC memDC = CreateCompatibleDC(hdc);
+
+    void* pBits; // Pointer to the bitmap bits
+    HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
+    if (!hBitmap) {
+        std::cerr << "Error creating DIB section." << std::endl;
+        DeleteDC(memDC);
+        return;
+    }
+
+    HBITMAP hOldBitmap = (HBITMAP)SelectObject(memDC, hBitmap);
+
     int nDPI = GetDeviceCaps(hdc, LOGPIXELSY);
 
-    int italic = 0;
-    int cWeight = 400;
-    int fontSize = 12;
+    int nHeight = -MulDiv(FONT_SIZE, nDPI, 72);
 
-    int nHeight = -MulDiv(fontSize, nDPI, 72);
+    HFONT font = CreateFontW(nHeight, 0, 0, 0, WEIGHT, ITALIC, 0, 0, 1, 0, 0, 2, 2, FONTNAME_W);
+    SelectObject(hdc, font);
 
-    Debug::DebuggerMessage(Debug::LVL_INFO, "Create font %ls\n", FONTNAME_W);
-    HFONT font = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, FONTNAME_W);
-
-    if (font == 0)
+    int x = 0, y = 0;
+    for (WCHAR unicodeChar = *startChar; unicodeChar < *endChar; unicodeChar++)
     {
-        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder.cpp", "Failed to create font\n");
+        SIZE size;
+        GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
 
-        return 0;
-    }
+        if (size.cx == 0 || size.cy == 0)
+            continue;
 
-    HFONT hOldFont = (HFONT)SelectObject(hdc, font);
+        RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
+        DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
 
-    TEXTMETRICW tm;
-    GetTextMetricsW(hdc, &tm);
+        int prespace = 0;
+        int width = size.cx;
+        int advance = size.cy;
 
-    PrintTextMetrics(tm);
+        char buf[500];
+        sprintf_s(buf, "%d,%d,%d,%d,%d\n", unicodeChar, *textureIdx, prespace, width, advance);
 
-    WCHAR startChar = 0x0000; // Start character
-    WCHAR endChar = 0xFFFF;   // End character
+        std::string glyph_layout(buf);
+        layoutFile->write(glyph_layout.c_str(), glyph_layout.length());
 
-    for (WCHAR unicodeChar = startChar; unicodeChar < endChar; unicodeChar++) 
-    {
-        WORD glyphIndex = 0;
-        if (GetGlyphIndicesW(hdc, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS) != GDI_ERROR) 
+        x += size.cx;
+        if (x > TEXTURE_SIZE)
         {
-            GLYPHMETRICS gm;
-            MAT2 pos;
-            IdentityMat(&pos);
-
-            DWORD dwGlyphSize = GetGlyphOutlineW(hdc, glyphIndex, GGO_GLYPH_INDEX | GGO_METRICS, &gm, 0, NULL, &pos);
-            if (dwGlyphSize != GDI_ERROR) 
-                PrintGlyphMetrics(gm, unicodeChar);
-            else 
-                Debug::DebuggerMessage(Debug::LVL_ERROR, "Failed to retrieve glyph metrics for Unicode character U+%04X.\n", unicodeChar);
+            x = 0;
+            y += size.cy;
         }
-        else 
-            Debug::DebuggerMessage(Debug::LVL_ERROR, "Failed to convert Unicode character U+%04X to glyph index.\n", unicodeChar);
-    }
 
-    bool done = false;
-    while (!done)
-    {
-        int xPos = 10, yPos = 10;
-
-        for (WCHAR unicodeChar = startChar; unicodeChar < endChar; unicodeChar++)
+        if (y > TEXTURE_SIZE)
         {
-            WCHAR str[2] = { unicodeChar, '\0' };
-            TextOutW(hdc, xPos, yPos, str, 1);
-            xPos += 20;
-            if (xPos > 600) {
-                xPos = 10;
-                yPos += 30;
-            }
+            *startChar = unicodeChar;
+            *textureIdx += 1;
+            break;
         }
     }
+
+    BITMAP bmp;
+    GetObject(hBitmap, sizeof(BITMAP), &bmp);
+
+    BITMAPFILEHEADER bmfHeader = { 0 };
+    bmfHeader.bfType = 0x4D42; // "BM"
+    bmfHeader.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + bmp.bmWidthBytes * bmp.bmHeight;
+    bmfHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+    BITMAPINFOHEADER biHeader = { 0 };
+    biHeader.biSize = sizeof(BITMAPINFOHEADER);
+    biHeader.biWidth = bmp.bmWidth;
+    biHeader.biHeight = bmp.bmHeight;
+    biHeader.biPlanes = 1;
+    biHeader.biBitCount = bmp.bmBitsPixel;
+    biHeader.biCompression = BI_RGB;
+
+    std::ofstream file(filename, std::ios::out | std::ios::binary);
+    if (!file) {
+        std::cerr << "Error creating file." << std::endl;
+        SelectObject(memDC, hOldBitmap);
+        DeleteObject(hBitmap);
+        DeleteDC(memDC);
+        return;
+    }
+
+    file.write(reinterpret_cast<const char*>(&bmfHeader), sizeof(BITMAPFILEHEADER));
+    file.write(reinterpret_cast<const char*>(&biHeader), sizeof(BITMAPINFOHEADER));
+    file.write(reinterpret_cast<const char*>(pBits), bmp.bmWidthBytes * bmp.bmHeight);
+
+    // Cleanup
+    file.close();
+    SelectObject(memDC, hOldBitmap);
+    DeleteObject(hBitmap);
+    DeleteDC(memDC);
+
+    DeleteDC(memDC);
+}
+
+int main()
+{
+    int status = _wmkdir(L"Out/");
+
+    HDC hdc = GetDC(GetDesktopWindow());
+    SetBkMode(hdc, TRANSPARENT);
+
+    wchar_t layout_name[255];
+    swprintf_s(layout_name, L"%ls.txt", FILENAME_W);
+    std::ofstream layout_file(std::wstring(L"Out/" + std::wstring(layout_name)).c_str());
+
+    WCHAR start = 32;
+    WCHAR end = 65510;
+    int textureId = 0;
+
+    while (start < end)
+    {
+        wchar_t tex_name[255];
+        swprintf_s(tex_name, L"%ls_%04d.bmp", FILENAME_W, textureId);
+
+        WriteGlyphsToBitmap(hdc, &textureId, std::wstring(L"Out/" + std::wstring(tex_name)).c_str(), &layout_file , &start, &end);
+    }
+
+    return 1;
 }
