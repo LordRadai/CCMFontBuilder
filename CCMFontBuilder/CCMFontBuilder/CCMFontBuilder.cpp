@@ -191,8 +191,6 @@ int main(int argc, char* argv[])
     if (argc == 5)
         is_bold = argv[4];
 
-    int status = _wmkdir(L"Out/");
-
     HDC hdc = GetDC(GetDesktopWindow());
     SetBkMode(hdc, TRANSPARENT);
 
@@ -206,10 +204,13 @@ int main(int argc, char* argv[])
         italic = true;
 
     std::string filename = GetFilename(fontname.c_str(), size);
+    std::string outpath = "Out/" + filename + "/";
+
+    int status = _wmkdir(LPCWSTR(outpath.c_str()));
 
     char layout_name[255];
     sprintf_s(layout_name, "%s.txt", filename.c_str());
-    std::ofstream layout_file(std::string("Out/" + std::string(layout_name)).c_str());
+    std::ofstream layout_file(std::string("Out/" + filename + "/" + std::string(layout_name)).c_str());
 
     WCHAR start = 32;
     WCHAR end = 65510;
@@ -222,7 +223,7 @@ int main(int argc, char* argv[])
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
-        WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + std::string(tex_name)).c_str(), &layout_file , &start, &end, fontname.c_str(), size, bold, italic);
+        WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &start, &end, fontname.c_str(), size, bold, italic);
     }
 
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
