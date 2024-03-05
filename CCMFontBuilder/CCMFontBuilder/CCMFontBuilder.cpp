@@ -3,6 +3,7 @@
 #include <wingdi.h>
 #include <fstream>
 #include <filesystem>
+#include <DirectXTex.h>
 
 #include "DebugOutput/DebugOutput.h"
 #include "FromsoftFormat/CCM2Reader/CCM2Reader.h"
@@ -59,6 +60,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
     bmi.bmiHeader.biCompression = BI_RGB;
 
     HDC memDC = CreateCompatibleDC(hdc);
+    SetBkMode(memDC, TRANSPARENT);
 
     void* pBits;
     HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
@@ -111,6 +113,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
             break;
         }
 
+        SetTextColor(memDC, RGB(255, 255, 255));
         RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
         DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
 
@@ -157,6 +160,10 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         DeleteDC(memDC);
         return;
     }
+
+    DirectX::TexMetadata metadata;
+    DirectX::ScratchImage scratchImage;
+    DirectX::CaptureTextureFromHbitmap(GetDC(NULL), hBitmap, scratchImage);
 
     file.write(reinterpret_cast<const char*>(&bmfHeader), sizeof(BITMAPFILEHEADER));
     file.write(reinterpret_cast<const char*>(&biHeader), sizeof(BITMAPINFOHEADER));
