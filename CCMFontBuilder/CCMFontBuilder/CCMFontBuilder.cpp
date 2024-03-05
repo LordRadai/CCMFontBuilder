@@ -94,14 +94,16 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         SIZE size;
         GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
 
-        x += size.cx;
-        if (x > TEXTURE_SIZE)
+        if (size.cx == 0 || size.cy == 0)
+            continue;
+
+        if (x + size.cx > TEXTURE_SIZE)
         {
             x = 1;
             y += size.cy;
         }
 
-        if (y > TEXTURE_SIZE)
+        if (y + size.cy > TEXTURE_SIZE)
         {
             *startChar = unicodeChar;
             *textureIdx += 1;
@@ -120,6 +122,8 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
 
         std::string glyph_layout(buf);
         layoutFile->write(glyph_layout.c_str(), glyph_layout.length());
+
+        x += size.cx;
     }
 
     *startChar = unicodeChar;
