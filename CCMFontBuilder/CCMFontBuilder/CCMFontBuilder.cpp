@@ -203,10 +203,12 @@ int main(int argc, char* argv[])
     if (is_italic.compare("true") == 0)
         italic = true;
 
+    int status = _wmkdir(L"Out/");
+
     std::string filename = GetFilename(fontname.c_str(), size);
     std::string outpath = "Out/" + filename + "/";
 
-    int status = _wmkdir(LPCWSTR(outpath.c_str()));
+    status = _wmkdir(LPCWSTR(outpath.c_str()));
 
     char layout_name[255];
     sprintf_s(layout_name, "%s.txt", filename.c_str());
