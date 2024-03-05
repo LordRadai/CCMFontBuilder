@@ -155,7 +155,6 @@
     <ClInclude Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEvent.h" />
     <ClInclude Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEventData\TimeActEventData.h" />
     <ClInclude Include="FromsoftFormat\TimeActReader\TimeActReader.h" />
-    <ClInclude Include="Math\Math.h" />
     <ClInclude Include="MemReader\MemReader.h" />
     <ClInclude Include="StringHelper\StringHelper.h" />
   </ItemGroup>
@@ -168,7 +167,6 @@
     <ClCompile Include="FromsoftFormat\CCM2Reader\CCM2Reader.cpp" />
     <ClCompile Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.cpp" />
     <ClCompile Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.cpp" />
-    <ClCompile Include="Math\Math.cpp" />
     <ClCompile Include="MemReader\MemReader.cpp" />
     <ClCompile Include="StringHelper\StringHelper.cpp" />
   </ItemGroup>

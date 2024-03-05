@@ -93,9 +93,6 @@
     <ClInclude Include="MemReader\MemReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -126,9 +123,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StringHelper\StringHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
