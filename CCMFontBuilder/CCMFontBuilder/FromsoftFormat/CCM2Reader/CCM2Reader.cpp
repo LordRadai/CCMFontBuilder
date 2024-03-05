@@ -6,6 +6,11 @@ CCM2Reader::CCM2Reader()
 {
 }
 
+CCM2Reader::CCM2Reader(PWSTR pwOutPath)
+{
+
+}
+
 CCM2Reader::~CCM2Reader()
 {
 }

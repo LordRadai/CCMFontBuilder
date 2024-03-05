@@ -129,35 +129,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CCMFontBuilder.cpp" />
-    <ClCompile Include="DebugOutput\DebugOutput.cpp" />
-    <ClCompile Include="FromsoftFormat\BNDReader\BNDReader.cpp" />
-    <ClCompile Include="FromsoftFormat\CCM2Reader\CCM2Reader.cpp" />
-    <ClCompile Include="FromsoftFormat\FlverReader\FlverReader.cpp" />
-    <ClCompile Include="FromsoftFormat\MemReader\MemReader.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_EventTrack.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_FileNameLookupTable.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Header.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Network.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_NetworkDef.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Rig.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribBase.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribBool.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribSourceAnim.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribSourceEventTrack.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribUnknown.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\NMBReader.cpp" />
-    <ClCompile Include="FromsoftFormat\NMBReader\TinyXML\tinyxml2.cpp" />
-    <ClCompile Include="FromsoftFormat\NSAReader\NSAReader.cpp" />
-    <ClCompile Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEvent.cpp" />
-    <ClCompile Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEventData\TimeActEventData.cpp" />
-    <ClCompile Include="FromsoftFormat\TimeActReader\TimeActReader.cpp" />
-    <ClCompile Include="Math\Math.cpp" />
-    <ClCompile Include="MemReader\MemReader.cpp" />
-    <ClCompile Include="StringHelper\StringHelper.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="DebugOutput\DebugOutput.h" />
     <ClInclude Include="FromsoftFormat\BNDReader\BNDReader.h" />
     <ClInclude Include="FromsoftFormat\CCM2Reader\CCM2Reader.h" />
@@ -188,6 +159,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CCMFontBuilder.cpp" />
+    <ClCompile Include="DebugOutput\DebugOutput.cpp" />
+    <ClCompile Include="FromsoftFormat\CCM2Reader\CCM2Reader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

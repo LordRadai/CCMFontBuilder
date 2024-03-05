@@ -36,5 +36,6 @@ public:
 	bool m_init = false;
 
 	CCM2Reader();
+	CCM2Reader(PWSTR pwOutPath);
 	~CCM2Reader();
 };
