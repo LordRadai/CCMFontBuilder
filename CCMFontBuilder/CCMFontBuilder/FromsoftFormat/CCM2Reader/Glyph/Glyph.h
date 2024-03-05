@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <Windows.h>
 
 class Glyph
 {
