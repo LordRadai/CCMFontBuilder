@@ -5,6 +5,14 @@ TexRegion::TexRegion()
 {
 }
 
+TexRegion::TexRegion(short x1, short y1, short x2, short y2)
+{
+	this->m_x1 = x1;
+	this->m_y1 = y1;
+	this->m_x2 = x2;
+	this->m_y2 = y2;
+}
+
 TexRegion::~TexRegion()
 {
 }

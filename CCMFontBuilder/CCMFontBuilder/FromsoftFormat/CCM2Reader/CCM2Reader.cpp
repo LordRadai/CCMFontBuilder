@@ -8,6 +8,24 @@ Header::Header()
 {
 }
 
+Header::Header(int texture_size, int texRegionCount, int glyphCount, int textureCount)
+{
+	this->m_format = 0x20000;
+	this->m_fileSize = 0x20 + 8 * texRegionCount + 24 * glyphCount;
+	this->m_sVar8 = 18;
+	this->m_textureHeight = texture_size;
+	this->m_textureWidth = texture_size;
+	this->m_texRegionCount = texRegionCount;
+	this->m_glyphCount = glyphCount;
+	this->m_sVar12 = 0;
+	this->m_iVar14 = 32;
+	this->m_glyphOffset = 0x20 + 8 * texRegionCount;
+	this->m_bVar1C = 4;
+	this->m_bVar1D = 0;
+	this->m_textureCount = textureCount;
+	this->m_bVar1F = 0;
+}
+
 Header::~Header()
 {
 }
@@ -36,7 +54,7 @@ CCM2Reader::CCM2Reader()
 
 CCM2Reader::CCM2Reader(PWSTR pwPath)
 {
-	this->m_init = false;
+	this->m_init = true;
 	this->m_filePath = pwPath;
 
 	std::filesystem::path path(pwPath);

@@ -48,9 +48,8 @@ bool FilterGlyph(WCHAR chr)
     return false;
 }
 
-void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
+void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
-    // Create a compatible DIB section
     BITMAPINFO bmi = { 0 };
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = TEXTURE_SIZE;
@@ -61,7 +60,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
 
     HDC memDC = CreateCompatibleDC(hdc);
 
-    void* pBits; // Pointer to the bitmap bits
+    void* pBits;
     HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
     if (!hBitmap) {
         std::cerr << "Error creating DIB section." << std::endl;
@@ -115,9 +114,13 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
         DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
 
+        pCCM->m_texRegions.push_back(TexRegion(x, y, x + size.cx, y + size.cy));
+
         int prespace = 0;
         int width = size.cx;
         int advance = width + KERNING;
+
+        pCCM->m_glyphs.push_back(Glyph(unicodeChar, pCCM->m_glyphs.size(), *textureIdx, prespace, width, advance));
 
         char buf[500];
         sprintf_s(buf, "%d,%d,%d,%d,%d,(%d, %d),(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
@@ -161,10 +164,9 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
 
     // Cleanup
     file.close();
+
     SelectObject(memDC, hOldBitmap);
     DeleteObject(hBitmap);
-    DeleteDC(memDC);
-
     DeleteDC(memDC);
 }
 
@@ -227,9 +229,14 @@ int main(int argc, char* argv[])
     sprintf_s(layout_name, "%s.txt", filename.c_str());
     std::ofstream layout_file(std::string("Out/" + filename + "/" + std::string(layout_name)).c_str());
 
+    char ccm_name[255];
+    sprintf_s(ccm_name, "%s.ccm", filename.c_str());
+
     WCHAR start = START_CHAR;
     WCHAR end = END_CHAR;
     int textureId = 0;
+
+    CCM2Reader ccm2(PWSTR(ccm_name));
 
     while (start < end)
     {
@@ -238,7 +245,7 @@ int main(int argc, char* argv[])
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
-        WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &start, &end, fontname.c_str(), size, bold, italic);
+        WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
 
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);

@@ -23,6 +23,7 @@ public:
 	BYTE m_bVar1F;
 
 	Header();
+	Header(int texture_size, int texRegionCount, int glyphCount, int textureCount);
 	~Header();
 
 	void WriteToFile(std::ofstream* pOut);

@@ -14,6 +14,7 @@ public:
 	int m_iVar14;
 
 	Glyph();
+	Glyph(WCHAR code, int idx, short textureIdx, short preSpace, short width, short advance);
 	~Glyph();
 
 	bool WriteToFile(std::ofstream* pOut);
