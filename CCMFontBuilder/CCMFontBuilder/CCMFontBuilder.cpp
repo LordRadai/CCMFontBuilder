@@ -2,6 +2,7 @@
 #include <iostream>
 #include <wingdi.h>
 #include <fstream>
+#include <filesystem>
 
 #include "DebugOutput/DebugOutput.h"
 #define TEXTURE_SIZE 512
@@ -203,12 +204,10 @@ int main(int argc, char* argv[])
     if (is_italic.compare("true") == 0)
         italic = true;
 
-    int status = _wmkdir(L"Out/");
-
     std::string filename = GetFilename(fontname.c_str(), size);
     std::string outpath = "Out/" + filename + "/";
 
-    status = _wmkdir(LPCWSTR(outpath.c_str()));
+    std::filesystem::create_directories(outpath);
 
     char layout_name[255];
     sprintf_s(layout_name, "%s.txt", filename.c_str());
