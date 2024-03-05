@@ -168,6 +168,9 @@
     <ClCompile Include="FromsoftFormat\CCM2Reader\CCM2Reader.cpp" />
     <ClCompile Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.cpp" />
     <ClCompile Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.cpp" />
+    <ClCompile Include="Math\Math.cpp" />
+    <ClCompile Include="MemReader\MemReader.cpp" />
+    <ClCompile Include="StringHelper\StringHelper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -122,5 +122,14 @@
     <ClCompile Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MemReader\MemReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper\StringHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
