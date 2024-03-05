@@ -171,7 +171,7 @@ std::string GetFilename(const char* fontname, int size)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 4)
+    if (argc < 3)
     {
         Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize>", argc);
         return 0;
