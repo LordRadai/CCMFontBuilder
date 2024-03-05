@@ -75,7 +75,8 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
     SelectObject(hdc, font);
 
     int x = 0, y = 0;
-    for (WCHAR unicodeChar = *startChar; unicodeChar < *endChar; unicodeChar++)
+    WCHAR unicodeChar = 0;
+    for (unicodeChar = *startChar; unicodeChar < *endChar; unicodeChar++)
     {
         SIZE size;
         GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
@@ -110,6 +111,8 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
             break;
         }
     }
+
+    *startChar = unicodeChar;
 
     BITMAP bmp;
     GetObject(hBitmap, sizeof(BITMAP), &bmp);
