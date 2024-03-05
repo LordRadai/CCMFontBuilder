@@ -71,7 +71,7 @@ void Debug::Alert(MsgLevel level, const char* src_module, const char* fmt, ...)
 	__va_start(&args, fmt);
 
 	char msg[256];
-	UINT m_colliderType = MB_ICONASTERISK;
+	UINT type = MB_ICONASTERISK;
 
 	vsprintf_s(msg, fmt, args);
 
@@ -80,16 +80,16 @@ void Debug::Alert(MsgLevel level, const char* src_module, const char* fmt, ...)
 	switch (level)
 	{
 	case Debug::LVL_DEBUG:
-		m_colliderType = MB_ICONINFORMATION;
+		type = MB_ICONINFORMATION;
 		break;
 	case Debug::LVL_INFO:
-		m_colliderType = MB_ICONINFORMATION;
+		type = MB_ICONINFORMATION;
 		break;
 	case Debug::LVL_WARN:
-		m_colliderType = MB_ICONEXCLAMATION;
+		type = MB_ICONEXCLAMATION;
 		break;
 	case Debug::LVL_ERROR:
-		m_colliderType = MB_ICONERROR;
+		type = MB_ICONERROR;
 		break;
 	default:
 		Panic("Debug.cpp", "Invalid debug level\n");
@@ -97,5 +97,5 @@ void Debug::Alert(MsgLevel level, const char* src_module, const char* fmt, ...)
 	}
 
 	ShowCursor(true);
-	MessageBoxA(NULL, msg, src_module, m_colliderType);
+	MessageBoxA(NULL, msg, src_module, type);
 }

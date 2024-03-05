@@ -171,9 +171,9 @@ std::string GetFilename(const char* fontname, int size)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 3)
+    if (argc < 4)
     {
-        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: %ls <fontname> <fontsize> <isbold> <isitalic>", argv[0], argc);
+        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize>", argv[0], argc);
         return 0;
     }
 
@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
     std::string filename = GetFilename(fontname.c_str(), size);
 
     wchar_t layout_name[255];
-    swprintf_s(layout_name, L"%ls.txt", filename.c_str());
+    swprintf_s(layout_name, L"%s.txt", filename.c_str());
     std::ofstream layout_file(std::wstring(L"Out/" + std::wstring(layout_name)).c_str());
 
     WCHAR start = 32;
@@ -218,7 +218,7 @@ int main(int argc, char* argv[])
     while (start < end)
     {
         wchar_t tex_name[255];
-        swprintf_s(tex_name, L"%ls_%04d.bmp", filename.c_str(), textureId);
+        swprintf_s(tex_name, L"%s_%04d.bmp", filename.c_str(), textureId);
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
