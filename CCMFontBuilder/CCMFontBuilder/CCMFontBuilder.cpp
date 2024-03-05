@@ -172,7 +172,10 @@ std::wstring GetFilename(const wchar_t* fontname, int size)
 int main(int argc, wchar_t* argv[])
 {
     if (argc != 4)
+    {
         Debug::Alert(Debug::LVL_INFO, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize> <isbold> <isitalic>", argc);
+        return 0;
+    }
 
     std::wstring fontname = argv[0];
     int size = std::stod(argv[1]);
