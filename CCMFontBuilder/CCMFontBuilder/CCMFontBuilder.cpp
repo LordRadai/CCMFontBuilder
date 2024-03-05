@@ -37,7 +37,7 @@ void IdentityMat(MAT2* mat)
     mat->eM22.value = 1;
 }
 
-void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const wchar_t* fontname, int size, bool is_bold, bool is_italic)
+void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     // Create a compatible DIB section
     BITMAPINFO bmi = { 0 };
@@ -68,7 +68,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
     if (is_bold)
         cWeight = FW_BOLD;
 
-    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, is_italic, 0, 0, 1, 0, 0, 2, 2, fontname);
+    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, is_italic, 0, 0, 1, 0, 0, 2, 2, LPCWSTR(fontname));
     SelectObject(memDC, hFont);
 
     int x = 0, y = 0;
@@ -153,9 +153,9 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
     DeleteDC(memDC);
 }
 
-std::wstring GetFilename(const wchar_t* fontname, int size)
+std::string GetFilename(const char* fontname, int size)
 {
-    std::wstring filename = std::wstring(fontname) + L"_" + std::to_wstring(size);
+    std::string filename = std::string(fontname) + "_" + std::to_string(size);
 
     for (size_t i = 0; i < filename.length(); ++i) 
     {
@@ -169,18 +169,29 @@ std::wstring GetFilename(const wchar_t* fontname, int size)
     return filename;
 }
 
-int main(int argc, wchar_t* argv[])
+int main(int argc, char* argv[])
 {
-    if (argc != 5)
+    std::setlocale(LC_ALL, "");
+
+    if (argc < 3)
     {
-        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize> <isbold> <isitalic>", argc);
+        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: %ls <fontname> <fontsize> <isbold> <isitalic>", argv[0], argc);
         return 0;
     }
 
-    std::wstring fontname = argv[0];
-    int size = std::stod(argv[1]);
-    std::wstring is_bold = argv[2];
-    std::wstring is_italic = argv[3];
+    Debug::DebuggerMessage(Debug::LVL_DEBUG, "Args: %ls, %ls, %ls, %ls\n", argv[1], argv[2], argv[3], argv[4]);
+
+    std::string fontname = argv[1];
+    int size = std::stod(argv[2]);
+
+    std::string is_bold = "false";
+    std::string is_italic = "false";
+
+    if (argc == 4)
+        is_bold = argv[3];
+
+    if (argc == 5)
+        is_bold = argv[4];
 
     int status = _wmkdir(L"Out/");
 
@@ -190,13 +201,13 @@ int main(int argc, wchar_t* argv[])
     bool bold = false;
     bool italic = false;
 
-    if (is_bold.compare(L"true") == 0)
+    if (is_bold.compare("true") == 0)
         bold = true;
 
-    if (is_italic.compare(L"true") == 0)
+    if (is_italic.compare("true") == 0)
         italic = true;
 
-    std::wstring filename = GetFilename(fontname.c_str(), size);
+    std::string filename = GetFilename(fontname.c_str(), size);
 
     wchar_t layout_name[255];
     swprintf_s(layout_name, L"%ls.txt", filename.c_str());
