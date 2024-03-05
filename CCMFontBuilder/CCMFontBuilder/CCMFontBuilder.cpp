@@ -236,7 +236,8 @@ int main(int argc, char* argv[])
     WCHAR end = END_CHAR;
     int textureId = 0;
 
-    CCM2Reader ccm2 = CCM2Reader(PWSTR(ccm_name));
+    CCM2Reader ccm2;
+    ccm2.m_init = true;
 
     while (start < end)
     {
@@ -248,7 +249,14 @@ int main(int argc, char* argv[])
         WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
 
+    ccm2.WriteFile(PWSTR(ccm_name));
+
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
+
+    while (true)
+    {
+
+    }
 
     return 1;
 }

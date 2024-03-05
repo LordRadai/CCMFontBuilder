@@ -83,7 +83,7 @@ bool CCM2Reader::WriteFile(PWSTR pwOutPath)
 	this->m_outFilePath = pwOutPath;
 	
 	ofstream ccm_out;
-	ccm_out.open(this->m_outFilePath, ios::binary);
+	ccm_out.open(this->m_outFilePath, ios::binary | ios::out);
 
 	try
 	{
