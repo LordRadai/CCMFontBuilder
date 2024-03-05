@@ -21,10 +21,166 @@
     <ClCompile Include="DebugOutput\DebugOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FromsoftFormat\BNDReader\BNDReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\FlverReader\FlverReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\MemReader\MemReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribBool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribSourceAnim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribSourceEventTrack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribUnknown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_EventTrack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_FileNameLookupTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Header.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_NetworkDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Rig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\TinyXML\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NMBReader\NMBReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\NSAReader\NSAReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEventData\TimeActEventData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\TimeActReader\TimeActReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\CCM2Reader\CCM2Reader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper\StringHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemReader\MemReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugOutput\DebugOutput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FromsoftFormat\BNDReader\BNDReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\FlverReader\FlverReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\MemReader\MemReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribBool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribSourceAnim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribSourceEventTrack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\NodeAttrib\NodeAttribUnknown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_EventTrack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_FileNameLookupTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_NetworkDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle_Rig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\TinyXML\tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NMBReader\NMBReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\NSAReader\NSAReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEventData\TimeActEventData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\TimeActReader\TimeActEvent\TimeActEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\TimeActReader\TimeActReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\CCM2Reader\CCM2Reader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper\StringHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemReader\MemReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

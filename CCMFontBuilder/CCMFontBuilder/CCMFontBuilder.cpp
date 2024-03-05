@@ -5,6 +5,8 @@
 #include <filesystem>
 
 #include "DebugOutput/DebugOutput.h"
+#include "FromsoftFormat/CCM2Reader/CCM2Reader.h"
+
 #define TEXTURE_SIZE 512
 #define START_CHAR 32
 #define END_CHAR 65510
