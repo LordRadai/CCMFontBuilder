@@ -231,6 +231,7 @@ int main(int argc, char* argv[])
 
     char ccm_name[255];
     sprintf_s(ccm_name, "%s.ccm", filename.c_str());
+    std::string ccm_out = outpath + ccm_name;
 
     WCHAR start = START_CHAR;
     WCHAR end = END_CHAR;
@@ -249,14 +250,10 @@ int main(int argc, char* argv[])
         WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
 
-    ccm2.WriteFile(PWSTR(ccm_name));
+    ccm2.m_header = Header(TEXTURE_SIZE, ccm2.m_texRegions.size(), ccm2.m_glyphs.size(), textureId);
+    ccm2.WriteFile(PWSTR(ccm_out.c_str()));
 
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
-
-    while (true)
-    {
-
-    }
 
     return 1;
 }
