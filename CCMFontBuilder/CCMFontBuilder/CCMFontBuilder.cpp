@@ -9,7 +9,7 @@
 #define FILENAME_W L"MSGothic"
 
 const int TEXTURE_SIZE = 512;
-const int FONT_SIZE = 10;
+const int FONT_SIZE = 12;
 const int WEIGHT = FW_NORMAL;
 const bool ITALIC = false;
 
