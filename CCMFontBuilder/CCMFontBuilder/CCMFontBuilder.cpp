@@ -251,7 +251,7 @@ int main(int argc, char* argv[])
     }
 
     ccm2.m_header = Header(TEXTURE_SIZE, ccm2.m_texRegions.size(), ccm2.m_glyphs.size(), textureId);
-    ccm2.WriteFile(PWSTR(ccm_out.c_str()));
+    ccm2.WriteFile(ccm_out);
 
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
 

@@ -64,7 +64,7 @@ CCM2Reader::~CCM2Reader()
 {
 }
 
-bool CCM2Reader::WriteFile(PWSTR pwOutPath)
+bool CCM2Reader::WriteFile(std::string pwOutPath)
 {
 	if (this->m_init == false)
 		return false;
@@ -80,10 +80,9 @@ bool CCM2Reader::WriteFile(PWSTR pwOutPath)
 	}
 
 	bool state = true;
-	this->m_outFilePath = pwOutPath;
 	
 	ofstream ccm_out;
-	ccm_out.open(this->m_outFilePath, ios::binary | ios::out);
+	ccm_out.open(pwOutPath, ios::binary | ios::out);
 
 	try
 	{

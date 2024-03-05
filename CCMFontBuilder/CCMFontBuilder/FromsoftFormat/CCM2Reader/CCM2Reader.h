@@ -9,13 +9,13 @@ class Header
 public:
 	UINT m_format;
 	UINT m_fileSize;
-	short m_sVar8;
-	short m_textureWidth;
-	short m_textureHeight;
-	short m_texRegionCount;
-	short m_glyphCount;
-	short m_sVar12;
-	int m_iVar14;
+	USHORT m_sVar8;
+	USHORT m_textureWidth;
+	USHORT m_textureHeight;
+	USHORT m_texRegionCount;
+	USHORT m_glyphCount;
+	USHORT m_sVar12;
+	UINT m_iVar14;
 	UINT m_glyphOffset;
 	BYTE m_bVar1C;
 	BYTE m_bVar1D;
@@ -48,5 +48,5 @@ public:
 	CCM2Reader(PWSTR pwPath);
 	~CCM2Reader();
 
-	bool WriteFile(PWSTR pwPath);
+	bool WriteFile(std::string pwPath);
 };
