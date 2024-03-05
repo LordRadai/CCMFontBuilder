@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
     WCHAR end = END_CHAR;
     int textureId = 0;
 
-    CCM2Reader ccm2(PWSTR(ccm_name));
+    CCM2Reader ccm2 = CCM2Reader(PWSTR(ccm_name));
 
     while (start < end)
     {
