@@ -181,5 +181,7 @@ int main()
         WriteGlyphsToBitmap(hdc, &textureId, std::wstring(L"Out/" + std::wstring(tex_name)).c_str(), &layout_file , &start, &end);
     }
 
+    Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
+
     return 1;
 }
