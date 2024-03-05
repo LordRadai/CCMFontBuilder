@@ -9,7 +9,7 @@
 #define FILENAME_W L"MSGothic"
 
 const int TEXTURE_SIZE = 512;
-const int FONT_SIZE = 14;
+const int FONT_SIZE = 10;
 const int WEIGHT = FW_NORMAL;
 const bool ITALIC = false;
 
@@ -78,6 +78,10 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
     WCHAR unicodeChar = 0;
     for (unicodeChar = *startChar; unicodeChar < *endChar; unicodeChar++)
     {
+        WORD glyphIndex;
+        if (!GetGlyphIndicesW(hdc, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS)) 
+            continue;
+
         SIZE size;
         GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
 
