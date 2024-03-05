@@ -22,6 +22,8 @@ public:
 
 	Header();
 	~Header();
+
+	void WriteToFile(std::ofstream* pOut);
 };
 
 class CCM2Reader
@@ -35,7 +37,11 @@ public:
 	UINT64 m_outFileSize;
 	bool m_init = false;
 
+	Header m_header;
+
 	CCM2Reader();
-	CCM2Reader(PWSTR pwOutPath);
+	CCM2Reader(PWSTR pwPath);
 	~CCM2Reader();
+
+	bool WriteFile(PWSTR pwPath);
 };
