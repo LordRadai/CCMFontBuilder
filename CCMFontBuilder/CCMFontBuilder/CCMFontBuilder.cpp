@@ -37,7 +37,7 @@ void IdentityMat(MAT2* mat)
     mat->eM22.value = 1;
 }
 
-void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
+void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     // Create a compatible DIB section
     BITMAPINFO bmi = { 0 };
@@ -155,7 +155,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
 
 std::string GetFilename(const char* fontname, int size)
 {
-    std::string filename = std::string(fontname) + "_" + std::to_string(size);
+    std::string filename = std::string(fontname) + std::to_string(size);
 
     for (size_t i = 0; i < filename.length(); ++i) 
     {
@@ -207,9 +207,9 @@ int main(int argc, char* argv[])
 
     std::string filename = GetFilename(fontname.c_str(), size);
 
-    wchar_t layout_name[255];
-    swprintf_s(layout_name, L"%s.txt", filename.c_str());
-    std::ofstream layout_file(std::wstring(L"Out/" + std::wstring(layout_name)).c_str());
+    char layout_name[255];
+    sprintf_s(layout_name, "%s.txt", filename.c_str());
+    std::ofstream layout_file(std::string("Out/" + std::string(layout_name)).c_str());
 
     WCHAR start = 32;
     WCHAR end = 65510;
@@ -217,12 +217,12 @@ int main(int argc, char* argv[])
 
     while (start < end)
     {
-        wchar_t tex_name[255];
-        swprintf_s(tex_name, L"%s_%04d.bmp", filename.c_str(), textureId);
+        char tex_name[255];
+        sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
-        WriteGlyphsToBitmap(hdc, &textureId, std::wstring(L"Out/" + std::wstring(tex_name)).c_str(), &layout_file , &start, &end, fontname.c_str(), size, bold, italic);
+        WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + std::string(tex_name)).c_str(), &layout_file , &start, &end, fontname.c_str(), size, bold, italic);
     }
 
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
