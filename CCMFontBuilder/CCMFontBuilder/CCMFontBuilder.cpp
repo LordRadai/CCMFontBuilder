@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
 {
     if (argc < 4)
     {
-        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize>", argv[0], argc);
+        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize>", argc);
         return 0;
     }
 
