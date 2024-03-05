@@ -8,6 +8,7 @@
 #define TEXTURE_SIZE 512
 #define START_CHAR 32
 #define END_CHAR 65510
+#define KERNING 2
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
@@ -38,6 +39,11 @@ void IdentityMat(MAT2* mat)
 
     mat->eM21.value = 0;
     mat->eM22.value = 1;
+}
+
+bool FilterGlyph(WCHAR chr)
+{
+    return false;
 }
 
 void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
@@ -82,6 +88,9 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         if (!GetGlyphIndicesW(hdc, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS)) 
             continue;
 
+        if (FilterGlyph(unicodeChar))
+            continue;
+
         SIZE size;
         GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
 
@@ -93,7 +102,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
 
         int prespace = 0;
         int width = size.cx;
-        int advance = size.cy;
+        int advance = width + KERNING;
 
         char buf[500];
         sprintf_s(buf, "%d,%d,%d,%d,%d,(%d, %d),(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
