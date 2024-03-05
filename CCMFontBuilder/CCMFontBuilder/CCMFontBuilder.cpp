@@ -94,22 +94,6 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         SIZE size;
         GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
 
-        if (size.cx == 0 || size.cy == 0)
-            continue;
-
-        RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
-        DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
-
-        int prespace = 0;
-        int width = size.cx;
-        int advance = width + KERNING;
-
-        char buf[500];
-        sprintf_s(buf, "%d,%d,%d,%d,%d,(%d, %d),(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
-
-        std::string glyph_layout(buf);
-        layoutFile->write(glyph_layout.c_str(), glyph_layout.length());
-
         x += size.cx;
         if (x > TEXTURE_SIZE)
         {
@@ -123,6 +107,19 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
             *textureIdx += 1;
             break;
         }
+
+        RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
+        DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
+
+        int prespace = 0;
+        int width = size.cx;
+        int advance = width + KERNING;
+
+        char buf[500];
+        sprintf_s(buf, "%d,%d,%d,%d,%d,(%d, %d),(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
+
+        std::string glyph_layout(buf);
+        layoutFile->write(glyph_layout.c_str(), glyph_layout.length());
     }
 
     *startChar = unicodeChar;
