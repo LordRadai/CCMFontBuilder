@@ -72,7 +72,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
     int nHeight = -MulDiv(FONT_SIZE, nDPI, 72);
 
     HFONT font = CreateFontW(nHeight, 0, 0, 0, WEIGHT, ITALIC, 0, 0, 1, 0, 0, 2, 2, FONTNAME_W);
-    SelectObject(hdc, font);
+    SelectObject(memDC, font);
 
     int x = 0, y = 0;
     WCHAR unicodeChar = 0;
