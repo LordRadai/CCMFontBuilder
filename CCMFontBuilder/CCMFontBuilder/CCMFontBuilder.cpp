@@ -169,6 +169,8 @@ int main()
         wchar_t tex_name[255];
         swprintf_s(tex_name, L"%ls_%04d.bmp", FILENAME_W, textureId);
 
+        Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
+
         WriteGlyphsToBitmap(hdc, &textureId, std::wstring(L"Out/" + std::wstring(tex_name)).c_str(), &layout_file , &start, &end);
     }
 
