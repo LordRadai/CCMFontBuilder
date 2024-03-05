@@ -171,8 +171,6 @@ std::string GetFilename(const char* fontname, int size)
 
 int main(int argc, char* argv[])
 {
-    std::setlocale(LC_ALL, "");
-
     if (argc < 3)
     {
         Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: %ls <fontname> <fontsize> <isbold> <isitalic>", argv[0], argc);
