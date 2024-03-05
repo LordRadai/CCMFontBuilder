@@ -6,6 +6,8 @@
 
 #include "DebugOutput/DebugOutput.h"
 #define TEXTURE_SIZE 512
+#define START_CHAR 32
+#define END_CHAR 65510
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
@@ -72,7 +74,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
     HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, is_italic, 0, 0, 1, 0, 0, 2, 2, LPCWSTR(fontname));
     SelectObject(memDC, hFont);
 
-    int x = 0, y = 0;
+    int x = 1, y = 1;
     WCHAR unicodeChar = 0;
     for (unicodeChar = *startChar; unicodeChar < *endChar; unicodeChar++)
     {
@@ -94,7 +96,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         int advance = size.cy;
 
         char buf[500];
-        sprintf_s(buf, "%d,%d,%d,%d,%d\n", unicodeChar, *textureIdx, prespace, width, advance);
+        sprintf_s(buf, "%d,%d,%d,%d,%d,(%d, %d),(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
 
         std::string glyph_layout(buf);
         layoutFile->write(glyph_layout.c_str(), glyph_layout.length());
@@ -102,7 +104,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         x += size.cx;
         if (x > TEXTURE_SIZE)
         {
-            x = 0;
+            x = 1;
             y += size.cy;
         }
 
@@ -213,8 +215,8 @@ int main(int argc, char* argv[])
     sprintf_s(layout_name, "%s.txt", filename.c_str());
     std::ofstream layout_file(std::string("Out/" + filename + "/" + std::string(layout_name)).c_str());
 
-    WCHAR start = 32;
-    WCHAR end = 65510;
+    WCHAR start = START_CHAR;
+    WCHAR end = END_CHAR;
     int textureId = 0;
 
     while (start < end)
