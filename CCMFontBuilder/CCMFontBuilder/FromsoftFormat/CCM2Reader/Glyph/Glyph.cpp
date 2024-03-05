@@ -9,7 +9,7 @@ Glyph::~Glyph()
 {
 }
 
-bool Glyph::SaveToFile(std::ofstream* pOut)
+bool Glyph::WriteToFile(std::ofstream* pOut)
 {
 	MemReader::WriteDWord(pOut, this->m_code);
 	MemReader::WriteDWord(pOut, this->m_texRegionOffset);

@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include "TexRegion/TexRegion.h"
+#include "Glyph/Glyph.h"
 
 class Header
 {
@@ -38,6 +40,8 @@ public:
 	bool m_init = false;
 
 	Header m_header;
+	std::vector<TexRegion> m_texRegions;
+	std::vector<Glyph> m_glyphs;
 
 	CCM2Reader();
 	CCM2Reader(PWSTR pwPath);

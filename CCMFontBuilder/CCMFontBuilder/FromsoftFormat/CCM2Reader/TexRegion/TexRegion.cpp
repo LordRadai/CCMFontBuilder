@@ -9,7 +9,7 @@ TexRegion::~TexRegion()
 {
 }
 
-bool TexRegion::SaveToFile(std::ofstream* pOut)
+bool TexRegion::WriteToFile(std::ofstream* pOut)
 {
 	MemReader::WriteWord(pOut, this->m_x1);
 	MemReader::WriteWord(pOut, this->m_y1);

@@ -70,6 +70,12 @@ bool CCM2Reader::WriteFile(PWSTR pwOutPath)
 	try
 	{
 		this->m_header.WriteToFile(&ccm_out);
+
+		for (size_t i = 0; i < this->m_header.m_texRegionCount; i++)
+			this->m_texRegions[i].WriteToFile(&ccm_out);
+
+		for (size_t i = 0; i < this->m_header.m_glyphCount; i++)
+			this->m_glyphs[i].WriteToFile(&ccm_out);
 	}
 	catch (const std::exception& e)
 	{

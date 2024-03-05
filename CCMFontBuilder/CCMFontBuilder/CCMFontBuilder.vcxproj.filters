@@ -96,6 +96,12 @@
     <ClInclude Include="Math\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -108,6 +114,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DebugOutput\DebugOutput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

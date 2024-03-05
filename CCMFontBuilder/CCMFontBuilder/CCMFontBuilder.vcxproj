@@ -132,6 +132,8 @@
     <ClInclude Include="DebugOutput\DebugOutput.h" />
     <ClInclude Include="FromsoftFormat\BNDReader\BNDReader.h" />
     <ClInclude Include="FromsoftFormat\CCM2Reader\CCM2Reader.h" />
+    <ClInclude Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.h" />
+    <ClInclude Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.h" />
     <ClInclude Include="FromsoftFormat\FlverReader\FlverReader.h" />
     <ClInclude Include="FromsoftFormat\MemReader\MemReader.h" />
     <ClInclude Include="FromsoftFormat\NMBReader\MorphemeBundle\MorphemeBundle.h" />
@@ -164,6 +166,8 @@
     <ClCompile Include="CCMFontBuilder.cpp" />
     <ClCompile Include="DebugOutput\DebugOutput.cpp" />
     <ClCompile Include="FromsoftFormat\CCM2Reader\CCM2Reader.cpp" />
+    <ClCompile Include="FromsoftFormat\CCM2Reader\Glyph\Glyph.cpp" />
+    <ClCompile Include="FromsoftFormat\CCM2Reader\TexRegion\TexRegion.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

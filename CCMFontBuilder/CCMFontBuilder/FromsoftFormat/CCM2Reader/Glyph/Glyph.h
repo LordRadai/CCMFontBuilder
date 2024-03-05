@@ -16,5 +16,5 @@ public:
 	Glyph();
 	~Glyph();
 
-	bool SaveToFile(std::ofstream* pOut);
+	bool WriteToFile(std::ofstream* pOut);
 };

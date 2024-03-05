@@ -12,5 +12,5 @@ public:
 	TexRegion();
 	~TexRegion();
 
-	bool SaveToFile(std::ofstream* pOut);
+	bool WriteToFile(std::ofstream* pOut);
 };
