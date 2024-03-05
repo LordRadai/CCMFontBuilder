@@ -123,7 +123,7 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         pCCM->m_glyphs.push_back(Glyph(unicodeChar, pCCM->m_glyphs.size(), *textureIdx, prespace, width, advance));
 
         char buf[500];
-        sprintf_s(buf, "%d,%d,%d,%d,%d,(%d, %d),(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
+        sprintf_s(buf, "code=%d, textureId=%d, prespace=%d, width=%d, advance=%d, top=(%d, %d), bottom=(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
 
         std::string glyph_layout(buf);
         layoutFile->write(glyph_layout.c_str(), glyph_layout.length());
