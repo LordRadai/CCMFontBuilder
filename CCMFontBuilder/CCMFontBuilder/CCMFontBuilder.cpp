@@ -4,14 +4,7 @@
 #include <fstream>
 
 #include "DebugOutput/DebugOutput.h"
-
-#define FONTNAME_W L"MS Gothic"
-#define FILENAME_W L"MSGothic"
-
-const int TEXTURE_SIZE = 512;
-const int FONT_SIZE = 12;
-const int WEIGHT = FW_NORMAL;
-const bool ITALIC = false;
+#define TEXTURE_SIZE 512
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
@@ -44,7 +37,7 @@ void IdentityMat(MAT2* mat)
     mat->eM22.value = 1;
 }
 
-void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar)
+void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std::ofstream* layoutFile, WCHAR* startChar, WCHAR* endChar, const wchar_t* fontname, int size, bool is_bold, bool is_italic)
 {
     // Create a compatible DIB section
     BITMAPINFO bmi = { 0 };
@@ -69,10 +62,14 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
 
     int nDPI = GetDeviceCaps(hdc, LOGPIXELSY);
 
-    int nHeight = -MulDiv(FONT_SIZE, nDPI, 72);
+    int nHeight = -MulDiv(size, nDPI, 72);
+    int cWeight = FW_NORMAL;
 
-    HFONT font = CreateFontW(nHeight, 0, 0, 0, WEIGHT, ITALIC, 0, 0, 1, 0, 0, 2, 2, FONTNAME_W);
-    SelectObject(memDC, font);
+    if (is_bold)
+        cWeight = FW_BOLD;
+
+    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, is_italic, 0, 0, 1, 0, 0, 2, 2, fontname);
+    SelectObject(memDC, hFont);
 
     int x = 0, y = 0;
     WCHAR unicodeChar = 0;
@@ -156,15 +153,50 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const wchar_t* filename, std:
     DeleteDC(memDC);
 }
 
-int main()
+std::wstring GetFilename(const wchar_t* fontname, int size)
 {
+    std::wstring filename = std::wstring(fontname) + L"_" + std::to_wstring(size);
+
+    for (size_t i = 0; i < filename.length(); ++i) 
+    {
+        if (filename[i] == ' ') 
+        {
+            filename.erase(i, 1);
+            --i;
+        }
+    }
+
+    return filename;
+}
+
+int main(int argc, wchar_t* argv[])
+{
+    if (argc != 4)
+        Debug::Alert(Debug::LVL_INFO, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize> <isbold> <isitalic>", argc);
+
+    std::wstring fontname = argv[0];
+    int size = std::stod(argv[1]);
+    std::wstring is_bold = argv[2];
+    std::wstring is_italic = argv[3];
+
     int status = _wmkdir(L"Out/");
 
     HDC hdc = GetDC(GetDesktopWindow());
     SetBkMode(hdc, TRANSPARENT);
 
+    bool bold = false;
+    bool italic = false;
+
+    if (is_bold.compare(L"true") == 0)
+        bold = true;
+
+    if (is_italic.compare(L"true") == 0)
+        italic = true;
+
+    std::wstring filename = GetFilename(fontname.c_str(), size);
+
     wchar_t layout_name[255];
-    swprintf_s(layout_name, L"%ls.txt", FILENAME_W);
+    swprintf_s(layout_name, L"%ls.txt", filename.c_str());
     std::ofstream layout_file(std::wstring(L"Out/" + std::wstring(layout_name)).c_str());
 
     WCHAR start = 32;
@@ -174,11 +206,11 @@ int main()
     while (start < end)
     {
         wchar_t tex_name[255];
-        swprintf_s(tex_name, L"%ls_%04d.bmp", FILENAME_W, textureId);
+        swprintf_s(tex_name, L"%ls_%04d.bmp", filename.c_str(), textureId);
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
-        WriteGlyphsToBitmap(hdc, &textureId, std::wstring(L"Out/" + std::wstring(tex_name)).c_str(), &layout_file , &start, &end);
+        WriteGlyphsToBitmap(hdc, &textureId, std::wstring(L"Out/" + std::wstring(tex_name)).c_str(), &layout_file , &start, &end, fontname.c_str(), size, bold, italic);
     }
 
     Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
