@@ -42,22 +42,22 @@ void MemReader::ReadQWordArray(ifstream* pStream, UINT64* pDst, int iSize)
 
 void MemReader::WriteByte(ofstream* pStream, BYTE pDst)
 {
-	pStream->write((const char*)pDst, 1);
+	pStream->write((const char*)&pDst, 1);
 }
 
 void MemReader::WriteWord(ofstream* pStream, WORD pDst)
 {
-	pStream->write((const char*)pDst, 2);
+	pStream->write((const char*)&pDst, 2);
 }
 
 void MemReader::WriteDWord(ofstream* pStream, DWORD pDst)
 {
-	pStream->write((const char*)pDst, 4);
+	pStream->write((const char*)&pDst, 4);
 }
 
 void MemReader::WriteQWord(ofstream* pStream, UINT64 pDst)
 {
-	pStream->write((const char*)pDst, 8);
+	pStream->write((const char*)&pDst, 8);
 }
 
 void MemReader::WriteByteArray(ofstream* pStream, BYTE* pDst, int iSize)
