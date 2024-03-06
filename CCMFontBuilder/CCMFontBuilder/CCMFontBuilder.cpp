@@ -373,7 +373,7 @@ int main(int argc, char* argv[])
     while (start < end)
     {
         char tex_name[255];
-        sprintf_s(tex_name, "%s_%04d.dds", filename.c_str(), textureId);
+        sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
