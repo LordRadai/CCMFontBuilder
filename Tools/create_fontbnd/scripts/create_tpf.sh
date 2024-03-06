@@ -2,6 +2,11 @@ source "config.txt"
 input_folder="tmp/dds"
 font_folder="tmp/font"
 
+if [ -z "$(find "$input_folder" -maxdepth 1 -type f -name "*.dds")" ]; then
+	echo "There are no dds files in $input_folder"
+	exit1
+fi
+
 mkdir -p "$font_folder"
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>

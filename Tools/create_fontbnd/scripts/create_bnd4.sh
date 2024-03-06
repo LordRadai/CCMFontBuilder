@@ -1,6 +1,11 @@
 source "config.txt"
 tmp_folder="tmp"
 
+if [ -z "$(find "input/" -maxdepth 1 -type f -name "*.ccm")" ]; then
+	echo "There is no ccm file in input"
+	exit 1
+fi
+
 file=$(find input/ -type f -name "*.ccm" -print -quit)
 
 cp "$file" "$tmp_folder/font.ccm"

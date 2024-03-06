@@ -2,6 +2,11 @@ source "config.txt"
 input_folder="input"
 out_folder="tmp/dds"
 
+if [ -z "$(find "$input_folder" -maxdepth 1 -type f -name "*.bmp")" ]; then
+	echo "There are no bmp files in $input_folder"
+	exit 1
+fi
+
 mkdir -p "$out_folder"
 
 # Loop through each BMP file in the folder
