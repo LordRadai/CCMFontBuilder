@@ -117,7 +117,8 @@ bool CCM2Reader::CreateCCM2(std::string pwPath, int texture_size, int textureCou
 	this->m_header.m_textureCount = textureCount;
 
 	this->m_header.CalculateOffsets();
-	this->WriteFile(pwPath);
+
+	return this->WriteFile(pwPath);
 }
 
 bool CCM2Reader::WriteFile(std::string pwOutPath)
