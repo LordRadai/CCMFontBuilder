@@ -191,6 +191,22 @@ std::string GetFilename(const char* fontname, int size)
     return filename;
 }
 
+bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, const char* fontname, int size, bool is_bold, bool is_italic)
+{
+    while (startChar < endChar)
+    {
+        char tex_name[255];
+        sprintf_s(tex_name, "%s_%04d.bmp", filename, *textureIdx);
+
+        printf_s("Write file %s (startChar=%d, endChar=%d)\n", tex_name, startChar, endChar);
+
+        if (!WriteGlyphsToBitmap(textureIdx, std::string("Out/" + std::string(filename) + "/" + std::string(tex_name)).c_str(), layoutFile, pCCM, &startChar, &endChar, fontname, size, is_bold, is_italic))
+            return false;
+    }
+
+    return true;
+}
+
 int main(int argc, char* argv[])
 {
     if (argc < 3)
@@ -239,16 +255,8 @@ int main(int argc, char* argv[])
 
     CCM2Reader ccm2;
 
-    while (start < end)
-    {
-        char tex_name[255];
-        sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
-
-        printf_s("Write file %s (startChar=%d, endChar=%d)\n", tex_name, start, end);
-
-        if (!WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic))
-            return 0;
-    }
+    if (!GenerateBitmapSubset(start, end, &textureId, filename.c_str(), &layout_file, &ccm2, fontname.c_str(), size, bold, italic))
+        return 0;
 
     printf_s("Generating CCM2 file %s\n", ccm_name);
     ccm2.CreateCCM2(ccm_out, size, TEXTURE_SIZE, textureId);
