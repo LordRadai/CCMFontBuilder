@@ -16,24 +16,24 @@
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
-    Debug::DebuggerMessage(Debug::LVL_INFO, "Text Metrics:\n");
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of character: %d\n", tm.tmHeight);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAverage width of character: %d\n", tm.tmAveCharWidth);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight of font: %d\n", tm.tmHeight);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tAscent: %d\n", tm.tmAscent);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tDescent: %d\n", tm.tmDescent);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tInternal leading: %d\n", tm.tmInternalLeading);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tExternal leading: %d\n\n", tm.tmExternalLeading);
+    printf_s("Text Metrics:\n");
+    printf_s("\tHeight of character: %d\n", tm.tmHeight);
+    printf_s("\tAverage width of character: %d\n", tm.tmAveCharWidth);
+    printf_s("\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
+    printf_s("\tHeight of font: %d\n", tm.tmHeight);
+    printf_s("\tAscent: %d\n", tm.tmAscent);
+    printf_s("\tDescent: %d\n", tm.tmDescent);
+    printf_s("\tInternal leading: %d\n", tm.tmInternalLeading);
+    printf_s("\tExternal leading: %d\n\n", tm.tmExternalLeading);
 }
 
 void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
 {
-    Debug::DebuggerMessage(Debug::LVL_INFO, "Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tWidth: %ld\n", gm.gmBlackBoxX);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tHeight: %ld\n", gm.gmBlackBoxY);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
-    Debug::DebuggerMessage(Debug::LVL_INFO, "\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
+    printf_s("Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
+    printf_s("\tWidth: %ld\n", gm.gmBlackBoxX);
+    printf_s("\tHeight: %ld\n", gm.gmBlackBoxY);
+    printf_s("\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
+    printf_s("\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
 }
 
 void IdentityMat(MAT2* mat)
@@ -50,9 +50,8 @@ bool FilterGlyph(WCHAR chr)
     return false;
 }
 
-bool WriteGlyphsToBitmapCharList(int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx, const char* fontname, int size, bool is_bold, bool is_italic)
+bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
 {
-    HDC memDC = CreateCompatibleDC(nullptr);
     SetBkMode(memDC, TRANSPARENT);
 
     BITMAPINFO bmi = { 0 };
@@ -72,17 +71,6 @@ bool WriteGlyphsToBitmapCharList(int* textureIdx, const char* filename, std::ofs
     }
 
     SelectObject(memDC, hBitmap);
-
-    int nDPI = GetDeviceCaps(memDC, LOGPIXELSY);
-
-    int nHeight = -MulDiv(size, nDPI, 72);
-    int cWeight = FW_NORMAL;
-
-    if (is_bold)
-        cWeight = FW_BOLD;
-
-    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, is_italic, 0, 0, 1, 0, 0, 2, 2, LPCWSTR(fontname));
-    SelectObject(memDC, hFont);
 
     int x = 1, y = 1;
 
@@ -163,7 +151,6 @@ bool WriteGlyphsToBitmapCharList(int* textureIdx, const char* filename, std::ofs
         printf_s("Error creating file\n");
         file.close();
         DeleteObject(hBitmap);
-        DeleteDC(memDC);
         return false;
     }
 
@@ -175,7 +162,6 @@ bool WriteGlyphsToBitmapCharList(int* textureIdx, const char* filename, std::ofs
 
     // Cleanup
     DeleteObject(hBitmap);
-    DeleteDC(memDC);
 
     return true;
 }
@@ -400,6 +386,24 @@ int main(int argc, char* argv[])
 
     WCHAR start = 0;
 
+    HDC memDC = CreateCompatibleDC(nullptr);
+
+    int nDPI = GetDeviceCaps(memDC, LOGPIXELSY);
+
+    int nHeight = -MulDiv(size, nDPI, 72);
+    int cWeight = FW_NORMAL;
+
+    if (bold)
+        cWeight = FW_BOLD;
+
+    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, StringHelper::ToWide(fontname).c_str());
+    SelectObject(memDC, hFont);
+
+    TEXTMETRICW tm;
+    GetTextMetricsW(memDC, &tm);
+
+    PrintTextMetrics(tm);
+
     while (start < charList.size())
     {
         char tex_name[255];
@@ -407,8 +411,11 @@ int main(int argc, char* argv[])
 
         printf_s("Write file %s\n", tex_name);
 
-        if (!WriteGlyphsToBitmapCharList(&textureId, std::string("Out/" + std::string(filename) + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, charList, &start, fontname.c_str(), size, bold, italic))
+        if (!WriteGlyphsToBitmapCharList(memDC, &textureId, std::string("Out/" + std::string(filename) + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, charList, &start))
+        {
+            DeleteDC(memDC);
             return false;
+        }
     }
 
     printf_s("Generating CCM2 file %s\n", ccm_name);
@@ -416,5 +423,6 @@ int main(int argc, char* argv[])
     
     printf_s("Generated %d textures\n", textureId + 1);
 
+    DeleteDC(memDC);
     return 1;
 }
