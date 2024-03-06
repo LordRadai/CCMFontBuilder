@@ -45,8 +45,8 @@ Header::~Header()
 
 void Header::CalculateOffsets()
 {
-	this->m_fileSize = sizeof(this) + 8 * this->m_texRegionCount + 24 * this->m_glyphCount;
-	this->m_glyphOffset = sizeof(this) + 8 * this->m_texRegionCount;
+	this->m_fileSize = 32 + 8 * this->m_texRegionCount + 24 * this->m_glyphCount;
+	this->m_glyphOffset = 32 + 8 * this->m_texRegionCount;
 }
 
 void Header::WriteToFile(std::ofstream* pOut)
