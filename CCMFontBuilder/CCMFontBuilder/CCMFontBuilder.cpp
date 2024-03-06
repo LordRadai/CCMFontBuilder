@@ -50,9 +50,9 @@ bool FilterGlyph(WCHAR chr)
     return false;
 }
 
-void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
+void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
-    HDC memDC = CreateCompatibleDC(hdc);
+    HDC memDC = CreateCompatibleDC(nullptr);
     SetBkMode(memDC, TRANSPARENT);
 
     BITMAPINFO bmi = { 0 };
@@ -210,9 +210,6 @@ int main(int argc, char* argv[])
     if (argc == 5)
         is_bold = argv[4];
 
-    HDC hdc = GetDC(GetDesktopWindow());
-    SetBkMode(hdc, TRANSPARENT);
-
     bool bold = false;
     bool italic = false;
 
@@ -249,7 +246,7 @@ int main(int argc, char* argv[])
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
-        WriteGlyphsToBitmap(hdc, &textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
+        WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
 
     ccm2.m_header = Header(TEXTURE_SIZE, ccm2.m_texRegions.size(), ccm2.m_glyphs.size(), textureId);
