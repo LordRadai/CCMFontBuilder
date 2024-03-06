@@ -419,7 +419,7 @@ int main(int argc, char* argv[])
     }
 
     printf_s("Generating CCM2 file %s\n", ccm_name);
-    ccm2.CreateCCM2(ccm_out, size, TEXTURE_SIZE, textureId);
+    ccm2.CreateCCM2(ccm_out, tm.tmHeight, TEXTURE_SIZE, textureId);
     
     printf_s("Generated %d textures\n", textureId + 1);
 
