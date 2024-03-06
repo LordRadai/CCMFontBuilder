@@ -1,7 +1,8 @@
-magick="C:/Program Files/ImageMagick-7.1.1-Q16-HDRI/magick.exe"
-nvcompress="C:/Program Files/NVIDIA Corporation/NVIDIA Texture Tools/nvcompress.exe"
-input_folder="bmp"
-out_folder="dds"
+source "config.txt"
+input_folder="input"
+out_folder="tmp/dds"
+
+mkdir -p "$out_folder"
 
 # Loop through each BMP file in the folder
 for bmp_file in "$input_folder"/*.bmp; do

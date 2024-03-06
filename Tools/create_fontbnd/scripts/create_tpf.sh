@@ -1,5 +1,8 @@
-witchybnd="F:/Programmi/Dark Souls Modding/WitchyBND/WitchyBND.exe"
-input_folder="dds"
+source "config.txt"
+input_folder="tmp/dds"
+font_folder="tmp/font"
+
+mkdir -p "$font_folder"
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <tpf>
@@ -8,7 +11,9 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>
   <encoding>0x02</encoding>
   <flag2>0x03</flag2>
   <platform>PC</platform>
-  <textures>" >> "_witchy-bnd4.xml"
+  <textures>" > "$font_folder/_witchy-tpf.xml"
+
+cp "$input_folder"/* "$font_folder"/
 
 for dds_file in "$input_folder"/*.dds; do
 	name=$(basename -- "$dds_file")
@@ -19,8 +24,10 @@ for dds_file in "$input_folder"/*.dds; do
 		<flags1>0x00</flags1>
 	</texture>"
 
-	echo "$xml_content" >> "_witchy-bnd4.xml"
+	echo "$xml_content" >> "$font_folder/_witchy-tpf.xml"
 done
 
 echo "  </textures>
-</tpf>" >> "_witchy-bnd4.xml"
+</tpf>" >> "$font_folder/_witchy-tpf.xml"
+
+"$witchybnd" "$font_folder"
