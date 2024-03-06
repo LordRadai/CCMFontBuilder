@@ -12,7 +12,7 @@
 #define TEXTURE_SIZE 512
 #define START_CHAR 32
 #define END_CHAR 65510
-#define KERNING 2
+#define KERNING 0
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
@@ -66,7 +66,7 @@ void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
     void* pBits;
     HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
     if (!hBitmap) {
-        std::cerr << "Error creating DIB section." << std::endl;
+        printf_s("Error creating DIB section\n");
         DeleteDC(memDC);
         return;
     }
@@ -155,7 +155,8 @@ void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
 
     std::ofstream file(filename, std::ios::out | std::ios::binary);
     if (!file) {
-        std::cerr << "Error creating file." << std::endl;
+        printf_s("Error creating file\n");
+        file.close();
         DeleteObject(hBitmap);
         DeleteDC(memDC);
         return;
@@ -196,7 +197,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    Debug::DebuggerMessage(Debug::LVL_DEBUG, "Args: %ls, %ls, %ls, %ls\n", argv[1], argv[2], argv[3], argv[4]);
+    printf_s("Args: %ls, %ls, %ls, %ls\n", argv[1], argv[2], argv[3], argv[4]);
 
     std::string fontname = argv[1];
     int size = std::stod(argv[2]);
@@ -244,7 +245,7 @@ int main(int argc, char* argv[])
         char tex_name[255];
         sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
 
-        Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
+        printf_s("Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
         WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
@@ -252,7 +253,7 @@ int main(int argc, char* argv[])
     ccm2.m_header = Header(TEXTURE_SIZE, ccm2.m_texRegions.size(), ccm2.m_glyphs.size(), textureId);
     ccm2.WriteFile(ccm_out);
 
-    Debug::DebuggerMessage(Debug::LVL_DEBUG, "Generated %d textures\n", textureId);
+    printf_s("Generated %d textures\n", textureId);
 
     return 1;
 }
