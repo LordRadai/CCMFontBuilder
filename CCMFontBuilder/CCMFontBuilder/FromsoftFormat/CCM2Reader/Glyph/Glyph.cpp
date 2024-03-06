@@ -5,6 +5,18 @@ Glyph::Glyph()
 {
 }
 
+Glyph::Glyph(std::ifstream* pIn)
+{
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_code);
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_texRegionOffset);
+	MemReader::ReadWord(pIn, (WORD*)&this->m_textureIndex);
+	MemReader::ReadWord(pIn, (WORD*)&this->m_preSpace);
+	MemReader::ReadWord(pIn, (WORD*)&this->m_width);
+	MemReader::ReadWord(pIn, (WORD*)&this->m_advance);
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_iVar10);
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_iVar14);
+}
+
 Glyph::Glyph(WCHAR code, int idx, short textureIdx, short preSpace, short width, short advance)
 {
 	this->m_code = code;

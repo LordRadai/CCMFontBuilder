@@ -10,6 +10,7 @@ public:
 	short m_y2;
 
 	TexRegion();
+	TexRegion(std::ifstream* pIn);
 	TexRegion(short x1, short y1, short x2, short y2);
 	~TexRegion();
 

@@ -19,6 +19,24 @@ Header::Header()
 	this->CalculateOffsets();
 }
 
+Header::Header(std::ifstream* pIn)
+{
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_format);
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_fileSize);
+	MemReader::ReadWord(pIn, &this->m_fontSize);
+	MemReader::ReadWord(pIn, &this->m_textureWidth);
+	MemReader::ReadWord(pIn, &this->m_textureHeight);
+	MemReader::ReadWord(pIn, &this->m_texRegionCount);
+	MemReader::ReadWord(pIn, &this->m_glyphCount);
+	MemReader::ReadWord(pIn, &this->m_sVar12);
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_iVar14);
+	MemReader::ReadDWord(pIn, (DWORD*)&this->m_glyphOffset);
+	MemReader::ReadByte(pIn, &this->m_bVar1C);
+	MemReader::ReadByte(pIn, &this->m_bVar1D);
+	MemReader::ReadByte(pIn, &this->m_textureCount);
+	MemReader::ReadByte(pIn, &this->m_bVar1F);
+}
+
 Header::Header(int font_size, int texture_size, int texRegionCount, int glyphCount, int textureCount)
 {
 	this->m_format = 0x20000;
@@ -77,6 +95,25 @@ CCM2Reader::CCM2Reader(PWSTR pwPath)
 	this->m_filePath = pwPath;
 
 	std::filesystem::path path(pwPath);
+
+	std::ifstream pFile(pwPath);
+	if (!pFile.is_open())
+	{
+		this->m_init = false;
+		return;
+	}
+
+	this->m_header = Header(&pFile);
+
+	this->m_texRegions.reserve(this->m_header.m_texRegionCount);
+
+	for (size_t i = 0; i < this->m_header.m_texRegionCount; i++)
+		this->m_texRegions.push_back(TexRegion(&pFile));
+
+	for (size_t i = 0; i < this->m_header.m_glyphCount; i++)
+		this->m_glyphs.push_back(Glyph(&pFile));
+
+	this->m_fileSize = this->m_header.m_fileSize;
 }
 
 CCM2Reader::~CCM2Reader()

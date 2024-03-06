@@ -23,6 +23,7 @@ public:
 	BYTE m_bVar1F;
 
 	Header();
+	Header(std::ifstream* pIn);
 	Header(int font_size, int texture_size, int texRegionCount, int glyphCount, int textureCount);
 	~Header();
 
