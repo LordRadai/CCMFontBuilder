@@ -10,7 +10,7 @@ class Header
 public:
 	UINT m_format;
 	UINT m_fileSize;
-	USHORT m_fontSize;
+	USHORT m_fontHeight;
 	USHORT m_textureWidth;
 	USHORT m_textureHeight;
 	USHORT m_texRegionCount;
