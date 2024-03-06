@@ -249,13 +249,11 @@ int main(int argc, char* argv[])
     sprintf_s(ccm_name, "%s.ccm", filename.c_str());
     std::string ccm_out = outpath + ccm_name;
 
-    WCHAR start = START_CHAR;
-    WCHAR end = END_CHAR;
     int textureId = 0;
 
     CCM2Reader ccm2;
 
-    if (!GenerateBitmapSubset(start, end, &textureId, filename.c_str(), &layout_file, &ccm2, fontname.c_str(), size, bold, italic))
+    if (!GenerateBitmapSubset(32, 65510, &textureId, filename.c_str(), &layout_file, &ccm2, fontname.c_str(), size, bold, italic))
         return 0;
 
     printf_s("Generating CCM2 file %s\n", ccm_name);
