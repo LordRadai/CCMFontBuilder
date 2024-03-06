@@ -4,6 +4,7 @@
 #include <fstream>
 #include <filesystem>
 #include <DirectXTex.h>
+#include <wincodec.h>
 
 #include "StringHelper/StringHelper.h"
 #include "DebugOutput/DebugOutput.h"
@@ -45,10 +46,169 @@ void IdentityMat(MAT2* mat)
     mat->eM22.value = 1;
 }
 
+HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
+    HRESULT hr = S_OK;
+
+    // Initialize COM
+    hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to initialize COM" << std::endl;
+        return hr;
+    }
+
+    // Create WIC imaging factory
+    IWICImagingFactory* pFactory = nullptr;
+    hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFactory));
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create WIC imaging factory" << std::endl;
+        CoUninitialize();
+        return hr;
+    }
+
+    // Create WIC stream for writing
+    IWICStream* pStream = nullptr;
+    hr = pFactory->CreateStream(&pStream);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create WIC stream" << std::endl;
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Initialize stream with output filename
+    hr = pStream->InitializeFromFilename(filename, GENERIC_WRITE);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to initialize WIC stream with filename" << std::endl;
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Create PNG encoder
+    IWICBitmapEncoder* pEncoder = nullptr;
+    hr = pFactory->CreateEncoder(GUID_ContainerFormatPng, nullptr, &pEncoder);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create PNG encoder" << std::endl;
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Initialize encoder with stream
+    hr = pEncoder->Initialize(pStream, WICBitmapEncoderNoCache);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to initialize encoder" << std::endl;
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Create encoder frame
+    IWICBitmapFrameEncode* pFrameEncode = nullptr;
+    hr = pEncoder->CreateNewFrame(&pFrameEncode, nullptr);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create encoder frame" << std::endl;
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Initialize frame encode with DIB section bitmap
+    hr = pFrameEncode->Initialize(nullptr);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to initialize frame encode" << std::endl;
+        pFrameEncode->Release();
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Set size of frame
+    BITMAP bm;
+    GetObject(hBitmap, sizeof(BITMAP), &bm);
+    UINT width = bm.bmWidth;
+    UINT height = bm.bmHeight;
+    hr = pFrameEncode->SetSize(width, height);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to set size of frame" << std::endl;
+        pFrameEncode->Release();
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Set pixel format of frame
+    hr = pFrameEncode->SetPixelFormat((WICPixelFormatGUID*)&GUID_WICPixelFormat32bppBGRA);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to set pixel format of frame" << std::endl;
+        pFrameEncode->Release();
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Write bitmap to frame
+    HDC hDC = CreateCompatibleDC(nullptr);
+    HGDIOBJ hOldObj = SelectObject(hDC, hBitmap);
+    hr = pFrameEncode->WriteSource(reinterpret_cast<IWICBitmapSource*>(hBitmap), nullptr);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to write bitmap to frame" << std::endl;
+        DeleteDC(hDC);
+        pFrameEncode->Release();
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Release resources
+    DeleteDC(hDC);
+    SelectObject(hDC, hOldObj);
+
+    // Commit frame encode
+    hr = pFrameEncode->Commit();
+    if (FAILED(hr)) {
+        std::cerr << "Failed to commit frame encode" << std::endl;
+        pFrameEncode->Release();
+        pEncoder->Release();
+        pStream->Release();
+        pFactory->Release();
+        CoUninitialize();
+        return hr;
+    }
+
+    // Commit encoder
+    hr = pEncoder->Commit();
+    if (FAILED(hr)) {
+        std::cerr << "Failed to commit encoder" << std::endl;
+    }
+
+    // Release COM objects
+    pFrameEncode->Release();
+    pEncoder->Release();
+    pStream->Release();
+    pFactory->Release();
+
+    // Uninitialize COM
+    CoUninitialize();
+
+    return hr;
+}
 bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
 {
-    SetBkMode(memDC, TRANSPARENT);
-
     BITMAPINFO bmi = { 0 };
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = TEXTURE_SIZE;
@@ -61,11 +221,16 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filenam
     HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
     if (!hBitmap) {
         printf_s("Error creating DIB section\n");
-        DeleteDC(memDC);
         return false;
     }
 
     SelectObject(memDC, hBitmap);
+
+    COLORREF transparentColor = RGB(0, 0, 0);
+    HBRUSH hTransparentBrush = CreateSolidBrush(transparentColor);
+    RECT rc = { 0, 0, TEXTURE_SIZE, TEXTURE_SIZE };
+    FillRect(memDC, &rc, hTransparentBrush);
+    DeleteObject(hTransparentBrush);
 
     int x = 1, y = 1;
 
@@ -102,6 +267,7 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filenam
             break;
         }
 
+        SetBkMode(memDC, TRANSPARENT);
         SetTextColor(memDC, RGB(255, 255, 255));
         RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
         DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
@@ -304,7 +470,7 @@ bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, const
     while (startChar < endChar)
     {
         char tex_name[255];
-        sprintf_s(tex_name, "%s_%04d.bmp", filename, *textureIdx);
+        sprintf_s(tex_name, "%s_%04d.png", filename, *textureIdx);
 
         printf_s("Write file %s (startChar=%d, endChar=%d)\n", tex_name, startChar, endChar);
 
