@@ -6,12 +6,23 @@
 
 Header::Header()
 {
+	this->m_format = 0x20000; //CCM2
+	this->m_fileSize = 0;
+	this->m_sVar8 = 18;
+	this->m_sVar12 = 0;
+	this->m_iVar14 = 32;
+	this->m_glyphOffset = 0;
+	this->m_bVar1C = 4;
+	this->m_bVar1D = 0;
+	this->m_bVar1F = 0;
+
+	this->CalculateOffsets();
 }
 
 Header::Header(int texture_size, int texRegionCount, int glyphCount, int textureCount)
 {
 	this->m_format = 0x20000;
-	this->m_fileSize = 0x20 + 8 * texRegionCount + 24 * glyphCount;
+	this->m_fileSize = 0;
 	this->m_sVar8 = 18;
 	this->m_textureHeight = texture_size;
 	this->m_textureWidth = texture_size;
@@ -19,15 +30,23 @@ Header::Header(int texture_size, int texRegionCount, int glyphCount, int texture
 	this->m_glyphCount = glyphCount;
 	this->m_sVar12 = 0;
 	this->m_iVar14 = 32;
-	this->m_glyphOffset = 0x20 + 8 * texRegionCount;
+	this->m_glyphOffset = 0;
 	this->m_bVar1C = 4;
 	this->m_bVar1D = 0;
 	this->m_textureCount = textureCount;
 	this->m_bVar1F = 0;
+
+	this->CalculateOffsets();
 }
 
 Header::~Header()
 {
+}
+
+void Header::CalculateOffsets()
+{
+	this->m_fileSize = sizeof(this) + 8 * this->m_texRegionCount + 24 * this->m_glyphCount;
+	this->m_glyphOffset = sizeof(this) + 8 * this->m_texRegionCount;
 }
 
 void Header::WriteToFile(std::ofstream* pOut)
@@ -62,6 +81,43 @@ CCM2Reader::CCM2Reader(PWSTR pwPath)
 
 CCM2Reader::~CCM2Reader()
 {
+}
+
+int CCM2Reader::GetTexRegionCount()
+{
+	return this->m_header.m_texRegionCount;
+}
+
+int CCM2Reader::GetGlyphCount()
+{
+	return this->m_header.m_glyphCount;
+}
+
+void CCM2Reader::AddTexRegion(TexRegion texRegion)
+{
+	this->m_header.m_texRegionCount++;
+	this->m_header.CalculateOffsets();
+
+	this->m_texRegions.push_back(texRegion);
+}
+
+void CCM2Reader::AddGlyph(Glyph glyph)
+{
+	this->m_header.m_glyphCount++;
+	this->m_header.CalculateOffsets();
+
+	this->m_glyphs.push_back(glyph);
+}
+
+bool CCM2Reader::CreateCCM2(std::string pwPath, int texture_size, int textureCount)
+{
+	this->m_init = true;
+	this->m_header.m_textureWidth = texture_size;
+	this->m_header.m_textureHeight = texture_size;
+	this->m_header.m_textureCount = textureCount;
+
+	this->m_header.CalculateOffsets();
+	this->WriteFile(pwPath);
 }
 
 bool CCM2Reader::WriteFile(std::string pwOutPath)

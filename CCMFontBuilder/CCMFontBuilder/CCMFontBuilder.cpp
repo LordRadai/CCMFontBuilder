@@ -118,13 +118,13 @@ void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
         RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
         DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
 
-        pCCM->m_texRegions.push_back(TexRegion(x, y, x + size.cx, y + size.cy));
+        pCCM->AddTexRegion(TexRegion(x, y, x + size.cx, y + size.cy));
 
         int prespace = 0;
         int width = size.cx;
         int advance = width + KERNING;
 
-        pCCM->m_glyphs.push_back(Glyph(unicodeChar, pCCM->m_glyphs.size(), *textureIdx, prespace, width, advance));
+        pCCM->AddGlyph(Glyph(unicodeChar, pCCM->GetGlyphCount(), *textureIdx, prespace, width, advance));
 
         char buf[500];
         sprintf_s(buf, "code=%d, textureId=%d, prespace=%d, width=%d, advance=%d, top=(%d, %d), bottom=(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
@@ -236,7 +236,6 @@ int main(int argc, char* argv[])
     int textureId = 0;
 
     CCM2Reader ccm2;
-    ccm2.m_init = true;
 
     while (start < end)
     {
@@ -248,9 +247,9 @@ int main(int argc, char* argv[])
         WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
 
-    ccm2.m_header = Header(TEXTURE_SIZE, ccm2.m_texRegions.size(), ccm2.m_glyphs.size(), textureId);
-    ccm2.WriteFile(ccm_out);
-
+    printf_s("Generating CCM2 file %s\n", ccm_name);
+    ccm2.CreateCCM2(ccm_out, TEXTURE_SIZE, textureId);
+    
     printf_s("Generated %d textures\n", textureId);
 
     return 1;

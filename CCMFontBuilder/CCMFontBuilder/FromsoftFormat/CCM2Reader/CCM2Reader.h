@@ -26,12 +26,13 @@ public:
 	Header(int texture_size, int texRegionCount, int glyphCount, int textureCount);
 	~Header();
 
+	void CalculateOffsets();
 	void WriteToFile(std::ofstream* pOut);
 };
 
 class CCM2Reader
 {
-public:
+private:
 	std::wstring m_fileName;
 
 	PWSTR m_filePath;
@@ -44,9 +45,15 @@ public:
 	std::vector<TexRegion> m_texRegions;
 	std::vector<Glyph> m_glyphs;
 
+public:
 	CCM2Reader();
 	CCM2Reader(PWSTR pwPath);
 	~CCM2Reader();
 
+	int GetTexRegionCount();
+	int GetGlyphCount();
+	void AddTexRegion(TexRegion texRegion);
+	void AddGlyph(Glyph glyph);
+	bool CreateCCM2(std::string pwPath, int texture_size, int textureCount);
 	bool WriteFile(std::string pwPath);
 };
