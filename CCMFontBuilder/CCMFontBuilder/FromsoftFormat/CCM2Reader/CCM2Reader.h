@@ -9,7 +9,7 @@ class Header
 public:
 	UINT m_format;
 	UINT m_fileSize;
-	USHORT m_sVar8;
+	USHORT m_fontSize;
 	USHORT m_textureWidth;
 	USHORT m_textureHeight;
 	USHORT m_texRegionCount;
@@ -23,7 +23,7 @@ public:
 	BYTE m_bVar1F;
 
 	Header();
-	Header(int texture_size, int texRegionCount, int glyphCount, int textureCount);
+	Header(int font_size, int texture_size, int texRegionCount, int glyphCount, int textureCount);
 	~Header();
 
 	void CalculateOffsets();
@@ -54,6 +54,6 @@ public:
 	int GetGlyphCount();
 	void AddTexRegion(TexRegion texRegion);
 	void AddGlyph(Glyph glyph);
-	bool CreateCCM2(std::string pwPath, int texture_size, int textureCount);
+	bool CreateCCM2(std::string pwPath, int font_size, int texture_size, int textureCount);
 	bool WriteFile(std::string pwPath);
 };

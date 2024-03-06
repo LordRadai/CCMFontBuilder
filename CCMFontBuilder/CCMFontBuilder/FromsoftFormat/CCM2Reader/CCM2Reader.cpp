@@ -8,7 +8,7 @@ Header::Header()
 {
 	this->m_format = 0x20000; //CCM2
 	this->m_fileSize = 0;
-	this->m_sVar8 = 18;
+	this->m_fontSize = 0;
 	this->m_sVar12 = 0;
 	this->m_iVar14 = 32;
 	this->m_glyphOffset = 0;
@@ -19,11 +19,11 @@ Header::Header()
 	this->CalculateOffsets();
 }
 
-Header::Header(int texture_size, int texRegionCount, int glyphCount, int textureCount)
+Header::Header(int font_size, int texture_size, int texRegionCount, int glyphCount, int textureCount)
 {
 	this->m_format = 0x20000;
 	this->m_fileSize = 0;
-	this->m_sVar8 = 18;
+	this->m_fontSize = font_size;
 	this->m_textureHeight = texture_size;
 	this->m_textureWidth = texture_size;
 	this->m_texRegionCount = texRegionCount;
@@ -53,7 +53,7 @@ void Header::WriteToFile(std::ofstream* pOut)
 {
 	MemReader::WriteDWord(pOut, this->m_format);
 	MemReader::WriteDWord(pOut, this->m_fileSize);
-	MemReader::WriteWord(pOut, this->m_sVar8);
+	MemReader::WriteWord(pOut, this->m_fontSize);
 	MemReader::WriteWord(pOut, this->m_textureWidth);
 	MemReader::WriteWord(pOut, this->m_textureHeight);
 	MemReader::WriteWord(pOut, this->m_texRegionCount);
@@ -109,9 +109,10 @@ void CCM2Reader::AddGlyph(Glyph glyph)
 	this->m_glyphs.push_back(glyph);
 }
 
-bool CCM2Reader::CreateCCM2(std::string pwPath, int texture_size, int textureCount)
+bool CCM2Reader::CreateCCM2(std::string pwPath, int font_size, int texture_size, int textureCount)
 {
 	this->m_init = true;
+	this->m_header.m_fontSize = font_size;
 	this->m_header.m_textureWidth = texture_size;
 	this->m_header.m_textureHeight = texture_size;
 	this->m_header.m_textureCount = textureCount;
