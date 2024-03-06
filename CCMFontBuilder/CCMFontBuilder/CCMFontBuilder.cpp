@@ -295,14 +295,6 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         return;
     }
 
-    std::ofstream file(filename, std::ios::out | std::ios::binary);
-    if (!file) {
-        std::cerr << "Error creating file." << std::endl;
-        DeleteObject(hBitmap);
-        DeleteDC(memDC);
-        return;
-    }
-
     file.write(reinterpret_cast<const char*>(&bmfHeader), sizeof(BITMAPFILEHEADER));
     file.write(reinterpret_cast<const char*>(&biHeader), sizeof(BITMAPINFOHEADER));
     file.write(reinterpret_cast<const char*>(pBits), bmp.bmWidthBytes * bmp.bmHeight);
