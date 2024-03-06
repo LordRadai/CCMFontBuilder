@@ -96,7 +96,8 @@ CCM2Reader::CCM2Reader(PWSTR pwPath)
 
 	std::filesystem::path path(pwPath);
 
-	std::ifstream pFile(pwPath);
+	std::ifstream pFile(pwPath, ios::binary);
+
 	if (!pFile.is_open())
 	{
 		this->m_init = false;
@@ -118,6 +119,11 @@ CCM2Reader::CCM2Reader(PWSTR pwPath)
 
 CCM2Reader::~CCM2Reader()
 {
+}
+
+bool CCM2Reader::GetInitStatus()
+{
+	return this->m_init;
 }
 
 int CCM2Reader::GetTexRegionCount()
