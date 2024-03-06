@@ -337,28 +337,6 @@ bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, const
     return true;
 }
 
-void CreateCharlistFromCCM2(PWSTR pCCMPath)
-{
-    CCM2Reader ccm2(pCCMPath);
-
-    if (!ccm2.GetInitStatus())
-    {
-        printf_s("CCM file not found\n");
-        return;
-    }
-
-    std::ofstream charList("charlist.txt");
-
-    for (size_t i = 0; i < ccm2.GetGlyphCount(); i++)
-    {
-        int code = ccm2.GetGlyph(i)->m_code;
-
-        charList << code << "\n";
-    }
-
-    charList.close();
-}
-
 int main(int argc, char* argv[])
 {
     if (argc < 3)
@@ -387,10 +365,6 @@ int main(int argc, char* argv[])
 
     if (is_italic.compare("true") == 0)
         italic = true;
-
-    wchar_t sample_ccm[50];
-    swprintf_s(sample_ccm, L"sample.ccm");
-    //CreateCharlistFromCCM2(sample_ccm);
 
     std::string filename = GetFilename(fontname.c_str(), size);
     std::string outpath = "Out/" + filename + "/";
