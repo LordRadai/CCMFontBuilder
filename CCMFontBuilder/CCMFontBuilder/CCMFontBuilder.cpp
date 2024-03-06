@@ -50,7 +50,7 @@ bool FilterGlyph(WCHAR chr)
     return false;
 }
 
-void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
+bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     HDC memDC = CreateCompatibleDC(nullptr);
     SetBkMode(memDC, TRANSPARENT);
@@ -68,7 +68,7 @@ void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
     if (!hBitmap) {
         printf_s("Error creating DIB section\n");
         DeleteDC(memDC);
-        return;
+        return false;
     }
 
     SelectObject(memDC, hBitmap);
@@ -159,7 +159,7 @@ void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
         file.close();
         DeleteObject(hBitmap);
         DeleteDC(memDC);
-        return;
+        return false;
     }
 
     file.write(reinterpret_cast<const char*>(&bmfHeader), sizeof(BITMAPFILEHEADER));
@@ -171,6 +171,8 @@ void WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
     // Cleanup
     DeleteObject(hBitmap);
     DeleteDC(memDC);
+
+    return true;
 }
 
 std::string GetFilename(const char* fontname, int size)
@@ -244,7 +246,8 @@ int main(int argc, char* argv[])
 
         printf_s("Write file %s (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
-        WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
+        if (!WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic))
+            return 0;
     }
 
     printf_s("Generating CCM2 file %s\n", ccm_name);
