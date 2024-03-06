@@ -197,8 +197,6 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    printf_s("Args: %ls, %ls, %ls, %ls\n", argv[1], argv[2], argv[3], argv[4]);
-
     std::string fontname = argv[1];
     int size = std::stod(argv[2]);
 
@@ -245,7 +243,7 @@ int main(int argc, char* argv[])
         char tex_name[255];
         sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
 
-        printf_s("Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
+        printf_s("Write file %s (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
         WriteGlyphsToBitmap(&textureId, std::string("Out/" + filename + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, &start, &end, fontname.c_str(), size, bold, italic);
     }
