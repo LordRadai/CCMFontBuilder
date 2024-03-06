@@ -203,9 +203,6 @@ bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
         if (!GetGlyphIndicesW(memDC, &unicodeChar, 1, &glyphIndex, GGI_MARK_NONEXISTING_GLYPHS))
             continue;
 
-        if (FilterGlyph(unicodeChar))
-            continue;
-
         SIZE size;
         GetTextExtentPoint32W(memDC, &unicodeChar, 1, &size);
 
