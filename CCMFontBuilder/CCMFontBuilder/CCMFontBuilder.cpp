@@ -391,10 +391,7 @@ int main(int argc, char* argv[])
 
     int num;
     while (inputFile >> num)
-    {
-        printf_s("%d\n", num);
         charList.push_back(num);
-    }
 
     inputFile.close();
 
