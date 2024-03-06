@@ -130,6 +130,22 @@ int CCM2Reader::GetGlyphCount()
 	return this->m_header.m_glyphCount;
 }
 
+TexRegion* CCM2Reader::GetTexRegion(int idx)
+{
+	if (idx > this->m_header.m_texRegionCount)
+		return nullptr;
+
+	return &this->m_texRegions[idx];
+}
+
+Glyph* CCM2Reader::GetGlyph(int idx)
+{
+	if (idx > this->m_header.m_glyphCount)
+		return nullptr;
+
+	return &this->m_glyphs[idx];
+}
+
 void CCM2Reader::AddTexRegion(TexRegion texRegion)
 {
 	this->m_header.m_texRegionCount++;

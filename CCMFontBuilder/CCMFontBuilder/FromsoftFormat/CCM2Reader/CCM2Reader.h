@@ -53,6 +53,8 @@ public:
 
 	int GetTexRegionCount();
 	int GetGlyphCount();
+	TexRegion* GetTexRegion(int idx);
+	Glyph* GetGlyph(int idx);
 	void AddTexRegion(TexRegion texRegion);
 	void AddGlyph(Glyph glyph);
 	bool CreateCCM2(std::string pwPath, int font_size, int texture_size, int textureCount);
