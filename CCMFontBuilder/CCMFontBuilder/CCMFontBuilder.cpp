@@ -382,8 +382,14 @@ int main(int argc, char* argv[])
 
     std::vector<WCHAR> charList;
     std::ifstream inputFile("charlist.txt");
-    int num;
 
+    if (!inputFile.is_open())
+    {
+        printf_s("charlist.txt does not exist\n");
+        return 0;
+    }
+
+    int num;
     while (inputFile >> num)
     {
         printf_s("%d\n", num);
