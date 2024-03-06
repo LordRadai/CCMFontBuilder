@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include <vector>
 #include "TexRegion/TexRegion.h"
 #include "Glyph/Glyph.h"
 
