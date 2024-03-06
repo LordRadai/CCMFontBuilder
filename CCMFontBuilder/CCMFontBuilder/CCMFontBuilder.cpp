@@ -295,6 +295,20 @@ void WriteGlyphsToBitmap(HDC hdc, int* textureIdx, const char* filename, std::of
         return;
     }
 
+    std::ofstream file(filename, std::ios::out | std::ios::binary);
+    if (!file) {
+        std::cerr << "Error creating file." << std::endl;
+        DeleteObject(hBitmap);
+        DeleteDC(memDC);
+        return;
+    }
+
+    file.write(reinterpret_cast<const char*>(&bmfHeader), sizeof(BITMAPFILEHEADER));
+    file.write(reinterpret_cast<const char*>(&biHeader), sizeof(BITMAPINFOHEADER));
+    file.write(reinterpret_cast<const char*>(pBits), bmp.bmWidthBytes * bmp.bmHeight);
+
+    file.close();
+
     // Cleanup
     DeleteObject(hBitmap);
     DeleteDC(memDC);
@@ -373,7 +387,7 @@ int main(int argc, char* argv[])
     while (start < end)
     {
         char tex_name[255];
-        sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
+        sprintf_s(tex_name, "%s_%04d.dds", filename.c_str(), textureId);
 
         Debug::DebuggerMessage(Debug::LVL_DEBUG, "Write file %ls (startChar=%d, endChar=%d)\n", tex_name, start, end);
 
