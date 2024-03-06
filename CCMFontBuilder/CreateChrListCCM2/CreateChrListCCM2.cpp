@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
     std::string ccm_path = argv[1];
 
-    wchar_t sample_ccm[50];
+    wchar_t sample_ccm[255];
     swprintf_s(sample_ccm, StringHelper::ToWide(ccm_path).c_str());
 
     CreateCharlistFromCCM2(sample_ccm);
