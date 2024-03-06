@@ -45,11 +45,6 @@ void IdentityMat(MAT2* mat)
     mat->eM22.value = 1;
 }
 
-bool FilterGlyph(WCHAR chr)
-{
-    return false;
-}
-
 bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
 {
     SetBkMode(memDC, TRANSPARENT);
