@@ -1,6 +1,11 @@
 source "config.txt"
 tmp_folder="tmp"
 
+if [ -d "$witchybnd" ]; then
+	echo "Specified WitchyBND folder does not exist ($witchybnd)"
+	exit 1
+fi
+
 if [ -z "$(find "input/" -maxdepth 1 -type f -name "*.ccm")" ]; then
 	echo "There is no ccm file in input"
 	exit 1

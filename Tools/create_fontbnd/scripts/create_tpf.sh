@@ -2,9 +2,14 @@ source "config.txt"
 input_folder="tmp/dds"
 font_folder="tmp/font"
 
+if [ -d "$witchybnd" ]; then
+	echo "Specified WitchyBND folder does not exist ($witchybnd)"
+	exit 1
+fi
+
 if [ -z "$(find "$input_folder" -maxdepth 1 -type f -name "*.dds")" ]; then
 	echo "There are no dds files in $input_folder"
-	exit1
+	exit 1
 fi
 
 mkdir -p "$font_folder"
