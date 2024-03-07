@@ -10,7 +10,7 @@ if [ ! -d "$nvcompress" ]; then
 	exit 1
 fi
 
-if [ -d "$witchybnd" ]; then
+if [ ! -d "$witchybnd" ]; then
 	echo "Specified WitchyBND folder does not exist ($witchybnd)"
 	exit 1
 fi
