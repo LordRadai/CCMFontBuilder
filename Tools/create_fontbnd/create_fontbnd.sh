@@ -1,3 +1,5 @@
+source "config.txt"
+
 if [ ! -d "$magick" ]; then
 	echo "Specified nvcompress folder does not exist ($magick)"
 	exit 1
