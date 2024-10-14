@@ -36,4 +36,4 @@ if [ $? -eq 1 ]; then
     exit 1
 fi
 
-rm -r "tmp/"
+rm -r ".\tmp\"

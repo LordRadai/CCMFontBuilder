@@ -2,7 +2,7 @@ source "config.txt"
 input_folder="tmp/dds"
 font_folder="tmp/font"
 
-if [ -f "$witchybnd" ]; then
+if [ ! -f "$witchybnd" ]; then
 	echo "Specified WitchyBND folder does not exist ($witchybnd)"
 	exit 1
 fi
