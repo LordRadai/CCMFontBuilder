@@ -1,18 +1,18 @@
 source "config.txt"
 
-if [ ! -d "$magick" ]; then
+if [ ! -f "$magick" ]; then
 	echo "Specified magick folder does not exist ($magick)"
 	sleep 2
 	exit 1
 fi
 
-if [ ! -d "$nvcompress" ]; then
+if [ ! -f "$nvcompress" ]; then
 	echo "Specified nvcompress folder does not exist ($nvcompress)"
 	sleep 2
 	exit 1
 fi
 
-if [ ! -d "$witchybnd" ]; then
+if [ ! -f "$witchybnd" ]; then
 	echo "Specified WitchyBND folder does not exist ($witchybnd)"
 	sleep 2
 	exit 1

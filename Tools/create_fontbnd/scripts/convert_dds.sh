@@ -2,12 +2,12 @@ source "config.txt"
 input_folder="input"
 out_folder="tmp/dds"
 
-if [ ! -d "$magick" ]; then
+if [ ! -f "$magick" ]; then
 	echo "Specified nvcompress folder does not exist ($magick)"
 	exit 1
 fi
 
-if [ ! -d "$nvcompress" ]; then
+if [ ! -f "$nvcompress" ]; then
 	echo "Specified nvcompress folder does not exist ($nvcompress)"
 	exit 1
 fi

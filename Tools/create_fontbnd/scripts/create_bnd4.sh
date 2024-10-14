@@ -1,7 +1,7 @@
 source "config.txt"
 tmp_folder="tmp"
 
-if [ -d "$witchybnd" ]; then
+if [ -f "$witchybnd" ]; then
 	echo "Specified WitchyBND folder does not exist ($witchybnd)"
 	exit 1
 fi
