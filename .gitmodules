@@ -1,0 +1,3 @@
+[submodule "CCMFontBuilder/RCore"]
+	path = CCMFontBuilder/RCore
+	url = https://github.com/LordRadai/RCore

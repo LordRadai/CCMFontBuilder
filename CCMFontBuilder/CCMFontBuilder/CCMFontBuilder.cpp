@@ -5,36 +5,35 @@
 #include <filesystem>
 #include <DirectXTex.h>
 #include <wincodec.h>
+#include <filesystem>
+#include "RCore.h"
 
-#include "StringHelper/StringHelper.h"
-#include "DebugOutput/DebugOutput.h"
-#include "FromsoftFormat/CCM2Reader/CCM2Reader.h"
+RLog* g_log;
 
-#define TEXTURE_SIZE 512
-#define START_CHAR 32
-#define END_CHAR 65510
-#define KERNING 0
+#define TEXTURE_SIZE 1024
+#define START_CHAR 0x20
+#define END_CHAR 0xFFFF
 
 void PrintTextMetrics(TEXTMETRICW tm)
 {
-    printf_s("Text Metrics:\n");
-    printf_s("\tHeight of character: %d\n", tm.tmHeight);
-    printf_s("\tAverage width of character: %d\n", tm.tmAveCharWidth);
-    printf_s("\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
-    printf_s("\tHeight of font: %d\n", tm.tmHeight);
-    printf_s("\tAscent: %d\n", tm.tmAscent);
-    printf_s("\tDescent: %d\n", tm.tmDescent);
-    printf_s("\tInternal leading: %d\n", tm.tmInternalLeading);
-    printf_s("\tExternal leading: %d\n\n", tm.tmExternalLeading);
+    g_log->debugMessage(MsgLevel_Debug, "Text Metrics:\n");
+    g_log->debugMessage(MsgLevel_Debug, "\tHeight of character: %d\n", tm.tmHeight);
+    g_log->debugMessage(MsgLevel_Debug, "\tAverage width of character: %d\n", tm.tmAveCharWidth);
+    g_log->debugMessage(MsgLevel_Debug, "\tMaximum width of character: %d\n", tm.tmMaxCharWidth);
+    g_log->debugMessage(MsgLevel_Debug, "\tHeight of font: %d\n", tm.tmHeight);
+    g_log->debugMessage(MsgLevel_Debug, "\tAscent: %d\n", tm.tmAscent);
+    g_log->debugMessage(MsgLevel_Debug, "\tDescent: %d\n", tm.tmDescent);
+    g_log->debugMessage(MsgLevel_Debug, "\tInternal leading: %d\n", tm.tmInternalLeading);
+    g_log->debugMessage(MsgLevel_Debug, "\tExternal leading: %d\n\n", tm.tmExternalLeading);
 }
 
 void PrintGlyphMetrics(GLYPHMETRICS gm, WCHAR unicodeChar)
 {
-    printf_s("Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
-    printf_s("\tWidth: %ld\n", gm.gmBlackBoxX);
-    printf_s("\tHeight: %ld\n", gm.gmBlackBoxY);
-    printf_s("\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
-    printf_s("\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
+    g_log->debugMessage(MsgLevel_Debug, "Glyph metrics for Unicode character U+%04X:\n", unicodeChar);
+    g_log->debugMessage(MsgLevel_Debug, "\tWidth: %ld\n", gm.gmBlackBoxX);
+    g_log->debugMessage(MsgLevel_Debug, "\tHeight: %ld\n", gm.gmBlackBoxY);
+    g_log->debugMessage(MsgLevel_Debug, "\tLeft side bearing: %ld\n", gm.gmptGlyphOrigin.x);
+    g_log->debugMessage(MsgLevel_Debug, "\tTop side bearing: %ld\n\n", gm.gmptGlyphOrigin.y);
 }
 
 void IdentityMat(MAT2* mat)
@@ -207,8 +206,11 @@ HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
 
     return hr;
 }
-bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
+
+bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, DLFontDataCCM2* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
 {
+	pCCM->setNumTextures(*textureIdx + 1);
+
     BITMAPINFO bmi = { 0 };
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = TEXTURE_SIZE;
@@ -220,7 +222,7 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filenam
     void* pBits;
     HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
     if (!hBitmap) {
-        printf_s("Error creating DIB section\n");
+        g_log->debugMessage(MsgLevel_Debug, "Error creating DIB section\n");
         return false;
     }
 
@@ -272,15 +274,13 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filenam
         RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
         DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
 
-        pCCM->AddTexRegion(TexRegion(x, y, x + size.cx, y + size.cy));
-
         int prespace = 0;
         int width = size.cx;
-        int advance = width + KERNING;
+        int advance = width + kerning;
 
-        pCCM->AddGlyph(Glyph(unicodeChar, pCCM->GetGlyphCount(), *textureIdx, prespace, width, advance));
+        pCCM->addGlyph(Glyph::create(unicodeChar, pCCM->getNumGlyphs(), *textureIdx, prespace, width, advance, TexRegion::create(x, y, x + size.cx, y + size.cy)));
 
-        char buf[500];
+        char buf[256];
         sprintf_s(buf, "code=%d, textureId=%d, prespace=%d, width=%d, advance=%d, top=(%d, %d), bottom=(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
 
         std::string glyph_layout(buf);
@@ -309,7 +309,7 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filenam
 
     std::ofstream file(filename, std::ios::out | std::ios::binary);
     if (!file) {
-        printf_s("Error creating file\n");
+        g_log->debugMessage(MsgLevel_Debug, "Error creating file\n");
         file.close();
         DeleteObject(hBitmap);
         return false;
@@ -327,7 +327,7 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, const char* filenam
     return true;
 }
 
-bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
+bool WriteGlyphsToBitmap(int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, DLFontDataCCM2* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     HDC memDC = CreateCompatibleDC(nullptr);
     SetBkMode(memDC, TRANSPARENT);
@@ -343,7 +343,7 @@ bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
     void* pBits;
     HBITMAP hBitmap = CreateDIBSection(memDC, &bmi, DIB_RGB_COLORS, &pBits, nullptr, 0);
     if (!hBitmap) {
-        printf_s("Error creating DIB section\n");
+        g_log->debugMessage(MsgLevel_Debug, "Error creating DIB section\n");
         DeleteDC(memDC);
         return false;
     }
@@ -392,15 +392,13 @@ bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
         RECT rect = { x, y, x + size.cx, y + size.cy }; // Adjust as needed
         DrawTextW(memDC, &unicodeChar, -1, &rect, DT_LEFT | DT_TOP);
 
-        pCCM->AddTexRegion(TexRegion(x, y, x + size.cx, y + size.cy));
-
         int prespace = 0;
         int width = size.cx;
-        int advance = width + KERNING;
+        int advance = width + kerning;
 
-        pCCM->AddGlyph(Glyph(unicodeChar, pCCM->GetGlyphCount(), *textureIdx, prespace, width, advance));
+        pCCM->addGlyph(Glyph::create(unicodeChar, pCCM->getNumGlyphs(), *textureIdx, prespace, width, advance, TexRegion::create(x, y, x + size.cx, y + size.cy)));
 
-        char buf[500];
+        char buf[256];
         sprintf_s(buf, "code=%d, textureId=%d, prespace=%d, width=%d, advance=%d, top=(%d, %d), bottom=(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
 
         std::string glyph_layout(buf);
@@ -429,7 +427,7 @@ bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
 
     std::ofstream file(filename, std::ios::out | std::ios::binary);
     if (!file) {
-        printf_s("Error creating file\n");
+        g_log->debugMessage(MsgLevel_Debug, "Error creating file\n");
         file.close();
         DeleteObject(hBitmap);
         DeleteDC(memDC);
@@ -449,60 +447,75 @@ bool WriteGlyphsToBitmap(int* textureIdx, const char* filename, std::ofstream* l
     return true;
 }
 
-std::string GetFilename(const char* fontname, int size)
-{
-    std::string filename = std::string(fontname) + std::to_string(size);
-
-    for (size_t i = 0; i < filename.length(); ++i) 
-    {
-        if (filename[i] == ' ') 
-        {
-            filename.erase(i, 1);
-            --i;
-        }
-    }
-
-    return filename;
-}
-
-bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, const char* filename, std::ofstream* layoutFile, CCM2Reader* pCCM, const char* fontname, int size, bool is_bold, bool is_italic)
+bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, DLFontDataCCM2* pCCM, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     while (startChar < endChar)
     {
         char tex_name[255];
         sprintf_s(tex_name, "%s_%04d.png", filename, *textureIdx);
 
-        printf_s("Write file %s (startChar=%d, endChar=%d)\n", tex_name, startChar, endChar);
+        g_log->debugMessage(MsgLevel_Info, "Write file %s (startChar=%d, endChar=%d)\n", tex_name, startChar, endChar);
 
-        if (!WriteGlyphsToBitmap(textureIdx, std::string("Out/" + std::string(filename) + "/" + std::string(tex_name)).c_str(), layoutFile, pCCM, &startChar, &endChar, fontname, size, is_bold, is_italic))
+        if (!WriteGlyphsToBitmap(textureIdx, kerning, std::string("Out/" + std::string(filename) + "/" + std::string(tex_name)).c_str(), layoutFile, pCCM, &startChar, &endChar, fontname, size, is_bold, is_italic))
             return false;
     }
 
     return true;
 }
 
-int main(int argc, char* argv[])
+void CCM2Test()
 {
+	DLFontDataCCM2* fontData = DLFontDataCCM2::loadFile(L"Resource\\test.ccm");
+
+	if (fontData == nullptr || !fontData->getInitStatus())
+		g_log->debugMessage(MsgLevel_Info, "Failed to load test ccm file");
+	else
+		g_log->debugMessage(MsgLevel_Info, "Load test SUCCESS\n");
+
+	if (!fontData->save(L"Out\\Test\\test_gen.ccm"))
+		g_log->debugMessage(MsgLevel_Info, "Failed to generate test ccm file\n");
+	else
+		g_log->debugMessage(MsgLevel_Info, "Write test SUCCESS\n");
+
+	fontData->destroy();
+}
+
+int main(int argc, char** argv)
+{
+	g_log = new RLog(MsgLevel_Debug, "Out\\", "CCMFontBuilder.log");
+
+#ifdef _DEBUG
+	g_log->debugMessage(MsgLevel_Debug, "---------CCM2 Test---------\n");
+	CCM2Test();
+	g_log->debugMessage(MsgLevel_Debug, "---------------------------\n");
+#endif
+
     if (argc < 3)
     {
-        Debug::Alert(Debug::LVL_ERROR, "CCMFontBuilder", "Wrong argument count %d. Usage: CCMFontBuilder.exe <fontname> <fontsize>", argc);
+		g_log->debugMessage(MsgLevel_Error, "Usage: %s \"fontname\" \"size\" [is_bold] [is_italic] [kerning]\n", argv[0]);
+        delete g_log;
         return 0;
     }
 
-    std::string fontname = argv[1];
-    int size = std::stod(argv[2]);
+    const std::string fontname = argv[1];
+    const int fontSize = std::stod(argv[2]);
 
     std::string is_bold = "false";
     std::string is_italic = "false";
+    std::string kerningStr = "0";
 
-    if (argc == 4)
+    if (argc > 3)
         is_bold = argv[3];
 
-    if (argc == 5)
+    if (argc > 4)
         is_bold = argv[4];
+
+    if (argc > 5)
+        kerningStr = argv[5];
 
     bool bold = false;
     bool italic = false;
+	const int kerning = std::stod(kerningStr);
 
     if (is_bold.compare("true") == 0)
         bold = true;
@@ -510,29 +523,27 @@ int main(int argc, char* argv[])
     if (is_italic.compare("true") == 0)
         italic = true;
 
-    std::string filename = GetFilename(fontname.c_str(), size);
-    std::string outpath = "Out/" + filename + "/";
+    std::string filename = std::filesystem::path(fontname).filename().string();
+    std::string outpath = "Out\\" + filename + "\\";
 
     std::filesystem::create_directories(outpath);
 
-    char layout_name[255];
+    char layout_name[256];
     sprintf_s(layout_name, "%s.txt", filename.c_str());
-    std::ofstream layout_file(std::string("Out/" + filename + "/" + std::string(layout_name)).c_str());
+    std::ofstream layout_file(std::string("Out\\" + filename + "\\" + std::string(layout_name)).c_str());
 
-    char ccm_name[255];
+    char ccm_name[256];
     sprintf_s(ccm_name, "%s.ccm", filename.c_str());
     std::string ccm_out = outpath + ccm_name;
 
     int textureId = 0;
 
-    CCM2Reader ccm2;
-
     std::vector<WCHAR> charList;
-    std::ifstream inputFile("charlist.txt");
+    std::ifstream inputFile("Resource\\charlist.txt");
 
     if (!inputFile.is_open())
     {
-        printf_s("charlist.txt does not exist\n");
+        g_log->debugMessage(MsgLevel_Error, "charlist.txt does not exist\n");
         return 0;
     }
 
@@ -545,16 +556,15 @@ int main(int argc, char* argv[])
     WCHAR start = 0;
 
     HDC memDC = CreateCompatibleDC(nullptr);
-
     int nDPI = GetDeviceCaps(memDC, LOGPIXELSY);
 
-    int nHeight = -MulDiv(size, nDPI, 72);
+    int nHeight = -MulDiv(fontSize, nDPI, 72);
     int cWeight = FW_NORMAL;
 
     if (bold)
         cWeight = FW_BOLD;
 
-    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, StringHelper::ToWide(fontname).c_str());
+    HFONT hFont = CreateFontW(nHeight, 0, 0, 0, cWeight, italic, 0, 0, 1, 0, 0, 2, 2, RString::toWide(fontname).c_str());
     SelectObject(memDC, hFont);
 
     TEXTMETRICW tm;
@@ -562,25 +572,30 @@ int main(int argc, char* argv[])
 
     PrintTextMetrics(tm);
 
+    g_log->debugMessage(MsgLevel_Info, "Generating CCM2 file %s\n", ccm_name);
+
+    DLFontDataCCM2* pCCM2 = DLFontDataCCM2::create(tm.tmHeight, TEXTURE_SIZE);
+
     while (start < charList.size())
     {
         char tex_name[255];
         sprintf_s(tex_name, "%s_%04d.bmp", filename.c_str(), textureId);
 
-        printf_s("Write file %s\n", tex_name);
+        g_log->debugMessage(MsgLevel_Info, "Write file %s\n", tex_name);
 
-        if (!WriteGlyphsToBitmapCharList(memDC, &textureId, std::string("Out/" + std::string(filename) + "/" + std::string(tex_name)).c_str(), &layout_file, &ccm2, charList, &start))
+        if (!WriteGlyphsToBitmapCharList(memDC, &textureId, kerning, std::string("Out\\" + std::string(filename) + "\\" + std::string(tex_name)).c_str(), &layout_file, pCCM2, charList, &start))
         {
             DeleteDC(memDC);
             return false;
         }
     }
 
-    printf_s("Generating CCM2 file %s\n", ccm_name);
-    ccm2.CreateCCM2(ccm_out, tm.tmHeight, TEXTURE_SIZE, textureId);
-    
-    printf_s("Generated %d textures\n", textureId + 1);
+	pCCM2->save(RString::toWide(ccm_out));
+
+    g_log->debugMessage(MsgLevel_Info, "Generated %d textures\n", textureId + 1);
 
     DeleteDC(memDC);
+
+    delete g_log;
     return 1;
 }
