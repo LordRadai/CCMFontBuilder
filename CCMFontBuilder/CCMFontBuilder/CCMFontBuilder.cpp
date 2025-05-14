@@ -537,6 +537,13 @@ int main(int argc, char** argv)
         italic = true;
 
     std::string filename = removeSpaces(std::filesystem::path(fontname).filename().string()) + std::string(argv[2]);
+
+    if (bold)
+		filename += "_bold";
+
+    if (italic)
+		filename += "_italic";
+
     std::string outpath = "Out\\" + filename + "\\";
 
     std::filesystem::create_directories(outpath);
