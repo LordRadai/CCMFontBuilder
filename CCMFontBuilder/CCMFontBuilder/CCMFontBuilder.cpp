@@ -480,6 +480,19 @@ void CCM2Test()
 	fontData->destroy();
 }
 
+std::string removeSpaces(const std::string& str)
+{
+	std::string result;
+
+	for (char c : str)
+	{
+		if (c != ' ')
+			result += c;
+	}
+
+	return result;
+}
+
 int main(int argc, char** argv)
 {
 	g_log = new RLog(MsgLevel_Debug, "Out\\", "CCMFontBuilder.log");
@@ -523,7 +536,7 @@ int main(int argc, char** argv)
     if (is_italic.compare("true") == 0)
         italic = true;
 
-    std::string filename = std::filesystem::path(fontname).filename().string();
+    std::string filename = removeSpaces(std::filesystem::path(fontname).filename().string()) + std::string(argv[2]);
     std::string outpath = "Out\\" + filename + "\\";
 
     std::filesystem::create_directories(outpath);

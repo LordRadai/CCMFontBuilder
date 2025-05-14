@@ -19,6 +19,7 @@ for dds_file in "$input_folder"/*.dds; do
 	nameExt=$(basename -- "$dds_file")
 
 	tpf_folder="$font_folder/$name"
+	witchy_tpf_xml="$tpf_folder/_witchy-tpf.xml"
 
 	mkdir -p "$tpf_folder"
 
@@ -33,17 +34,17 @@ for dds_file in "$input_folder"/*.dds; do
 	  <platform>PC</platform>
 	  <textures>"
 
-	echo "$xml_header" > "$tpf_folder/_witchy-tpf.xml"
+	echo "$xml_header" > "$witchy_tpf_xml"
   	
 	xml_content="	<texture>
-		<name>$name</name>
+		<name>$name.tpf</name>
 		<format>1</format>
 		<flags1>0x00</flags1>
 	</texture>"
 
-	echo "$xml_content" >> "$tpf_folder/_witchy-tpf.xml"
+	echo "$xml_content" >> "$witchy_tpf_xml"
 	echo "  </textures>
-	</tpf>" >> "$tpf_folder/_witchy-tpf.xml"
+	</tpf>" >> "$witchy_tpf_xml"
 
-	"$witchybnd" "$tpf_folder"
+	"$witchybnd" "$tpf_folder" "-s"
 done

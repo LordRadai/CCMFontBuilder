@@ -15,7 +15,9 @@ file=$(find input/ -type f -name "*.ccm" -print -quit)
 
 cp "$file" "$tmp_folder/font.ccm"
 
-mkdir "$tmp_folder/font-fontbnd-dcx"
+mkdir -p "$tmp_folder/font-fontbnd-dcx"
+
+mv "$tmp_folder/font.ccm" "$tmp_folder/font-fontbnd-dcx"/
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <bnd4>
@@ -31,24 +33,30 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>
   <unk05>False</unk05>
   <files>" > "$tmp_folder/font-fontbnd-dcx/_witchy-bnd4.xml"
   
-echo "	<file>
+echo "  <file>
       <flags>Flag1</flags>
       <id>0</id>
       <path>font.ccm</path>
     </file>" >> "$tmp_folder/font-fontbnd-dcx/_witchy-bnd4.xml"
 	
-echo "	<file>
-      <flags>Flag1</flags>
-      <id>1</id>
-      <path>font.tpf</path>
-    </file>" >> "$tmp_folder/font-fontbnd-dcx/_witchy-bnd4.xml"
-	
+id=1
+for tpf_file in "$tmp_folder"/font/*.tpf; do
+	name=$(basename -- "$tpf_file")
+
+	echo "  <file>
+		<flags>Flag1</flags>
+		<id>$id</id>
+		<path>$name</path>
+	</file>" >> "$tmp_folder/font-fontbnd-dcx/_witchy-bnd4.xml"
+
+  mv "$tmp_folder/font/$name" "$tmp_folder/font-fontbnd-dcx/"
+
+  ((id++))
+done
+
 echo "  </files>
 </bnd4>" >> "$tmp_folder/font-fontbnd-dcx/_witchy-bnd4.xml"
 
-cp "$tmp_folder/font.ccm" "$tmp_folder/font-fontbnd-dcx"/
-cp "$tmp_folder/font.tpf" "$tmp_folder/font-fontbnd-dcx"/
+"$witchybnd" "$tmp_folder/font-fontbnd-dcx" "-s"
 
-"$witchybnd" "$tmp_folder/font-fontbnd-dcx"
-
-cp "$tmp_folder/font.fontbnd.dcx" "font.fontbnd.dcx"
+mv "$tmp_folder/font.fontbnd.dcx" "font.fontbnd.dcx"
