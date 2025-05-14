@@ -5,6 +5,11 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RCore", "RCore\RCore\src\RCore.vcxproj", "{1E248D65-A668-4A85-94B0-BD29524B180B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CCMFontBuilder", "CCMFontBuilder\CCMFontBuilder.vcxproj", "{5643F746-5299-41EE-BB95-5057DA5530EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1E248D65-A668-4A85-94B0-BD29524B180B} = {1E248D65-A668-4A85-94B0-BD29524B180B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +26,14 @@ Global
 		{1E248D65-A668-4A85-94B0-BD29524B180B}.Release|x64.Build.0 = Release|x64
 		{1E248D65-A668-4A85-94B0-BD29524B180B}.Release|x86.ActiveCfg = Release|Win32
 		{1E248D65-A668-4A85-94B0-BD29524B180B}.Release|x86.Build.0 = Release|Win32
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Debug|x64.ActiveCfg = Debug|x64
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Debug|x64.Build.0 = Debug|x64
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Debug|x86.ActiveCfg = Debug|Win32
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Debug|x86.Build.0 = Debug|Win32
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Release|x64.ActiveCfg = Release|x64
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Release|x64.Build.0 = Release|x64
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Release|x86.ActiveCfg = Release|Win32
+		{5643F746-5299-41EE-BB95-5057DA5530EA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
