@@ -4,7 +4,7 @@
 
 RLog* g_log;
 
-void dumpCharset(DLFontDataCCM2* pFontData, std::filesystem::path out)
+void dumpCharset(DLFontData::DLFontDataCCM2* pFontData, std::filesystem::path out)
 {
 	if (pFontData == nullptr)
 		return;
@@ -17,7 +17,7 @@ void dumpCharset(DLFontDataCCM2* pFontData, std::filesystem::path out)
 
 	for (size_t i = 0; i < pFontData->getNumGlyphs(); i++)
 	{
-		const Glyph* glyph = pFontData->getGlyph(i);
+		const DLFontData::Glyph* glyph = pFontData->getGlyph(i);
 
 		if (glyph == nullptr)
 			continue;
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
 	std::wstring ccmFilePath = RString::toWide(argv[1]);
 
-	DLFontDataCCM2* fontData = DLFontDataCCM2::loadFile(ccmFilePath);
+	DLFontData::DLFontDataCCM2* fontData = DLFontData::DLFontDataCCM2::loadFile(ccmFilePath);
 	dumpCharset(fontData, L"charlist.txt");
 
 	return 0;
