@@ -505,7 +505,7 @@ int main(int argc, char** argv)
 
     if (argc < 3)
     {
-		g_log->debugMessage(MsgLevel_Error, "Usage: %s \"fontname\" \"size\" [is_bold] [is_italic] [kerning]\n", argv[0]);
+		g_log->debugMessage(MsgLevel_Error, "Usage: %s \"fontname\" \"size\" [bBold] [bBold] [kerning]\n", argv[0]);
         delete g_log;
         return 0;
     }
