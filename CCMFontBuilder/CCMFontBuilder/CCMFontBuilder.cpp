@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <DirectXTex.h>
 #include <wincodec.h>
-#include <filesystem>
 #include "RCore.h"
 
 RLog* g_log;
@@ -50,7 +49,8 @@ HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
 
     // Initialize COM
     hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    if (FAILED(hr)) {
+    if (FAILED(hr)) 
+    {
         std::cerr << "Failed to initialize COM" << std::endl;
         return hr;
     }
@@ -58,7 +58,8 @@ HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
     // Create WIC imaging factory
     IWICImagingFactory* pFactory = nullptr;
     hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFactory));
-    if (FAILED(hr)) {
+    if (FAILED(hr)) 
+    {
         std::cerr << "Failed to create WIC imaging factory" << std::endl;
         CoUninitialize();
         return hr;
@@ -67,7 +68,8 @@ HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
     // Create WIC stream for writing
     IWICStream* pStream = nullptr;
     hr = pFactory->CreateStream(&pStream);
-    if (FAILED(hr)) {
+    if (FAILED(hr)) 
+    {
         std::cerr << "Failed to create WIC stream" << std::endl;
         pFactory->Release();
         CoUninitialize();
@@ -76,7 +78,8 @@ HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
 
     // Initialize stream with output filename
     hr = pStream->InitializeFromFilename(filename, GENERIC_WRITE);
-    if (FAILED(hr)) {
+    if (FAILED(hr)) 
+    {
         std::cerr << "Failed to initialize WIC stream with filename" << std::endl;
         pStream->Release();
         pFactory->Release();

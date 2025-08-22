@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5643f746-5299-41ee-bb95-5057da5530ea}</ProjectGuid>
+    <ProjectGuid>{EF4C45CF-D472-496A-858B-163F32451A0F}</ProjectGuid>
     <RootNamespace>CCMFontBuilder</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -145,10 +145,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CCMFontBuilder.cpp" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClCompile Include="ConvertFntToCCM.cpp" />
+    <ClCompile Include="fntxml\fntxml.cpp" />
+    <ClCompile Include="WitchyXML\WitchyXML.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fntxml\fntxml.h" />
+    <ClInclude Include="WitchyXML\WitchyXML.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
