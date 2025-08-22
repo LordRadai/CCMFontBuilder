@@ -27,3 +27,13 @@ for folder in input/*; do
 		"$witchybnd" "$folder" "-s"
     fi
 done
+
+mkdir "output/"
+
+for file in input/*; do
+    if [ -f "$file" ] && [[ "$file" == *.dcx ]]; then
+        echo "Moving file $file"
+
+		mv "$file" "output/"
+    fi
+done
