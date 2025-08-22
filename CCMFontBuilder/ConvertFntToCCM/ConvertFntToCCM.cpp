@@ -58,7 +58,7 @@ DLFontData::DLFontDataCCM2* convertFntToCCM(const fnt::Font& fnt)
 
 int main(int argc, char** argv)
 {
-	g_log = new RLog(MsgLevel_Debug, "CCMFontBuilder.log", "CCMFontBuilder.log");
+	g_log = new RLog(MsgLevel_Debug, "ConvertFntToCCM.log", "ConvertFntToCCM");
 
     if (argc < 2)
     {
