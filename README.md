@@ -22,5 +22,5 @@ This will produce an `output` folder with a subfolder with the same name as the 
 
 If you want to pack the output to a fontbnd.dcx format, copy the output to the `pack_fontbnd/input` folder, edit `config.txt` and put there the absolute path to WitchyBND, then run `pack_fontbnd.sh`. This requires WitchyBND to be installed on your system.
 
-# RDAI'S SUGGESTION
+# NOTICE
 To generate bitmap fonts for game use, I recommend you use [/url=https://angelcode.com/products/bmfont/]bmfont[/url] alongside `ConvertFntToCCM`.
