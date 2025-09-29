@@ -210,7 +210,7 @@ HRESULT SaveDIBSectionToPNG(HBITMAP hBitmap, LPCWSTR filename) {
     return hr;
 }
 
-bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, DLFontData::DLFontDataCCM2* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
+bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, FontDataCCM2::FontDataCCM2* pCCM, std::vector<WCHAR> charList, WCHAR* charIdx)
 {
 	pCCM->setNumTextures(*textureIdx + 1);
 
@@ -281,7 +281,7 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, int kerning, const 
         int width = size.cx;
         int advance = width + kerning;
 
-        pCCM->addGlyph(DLFontData::Glyph::create(unicodeChar, pCCM->getNumGlyphs(), *textureIdx, prespace, width, advance, DLFontData::TexRegion::create(x, y, x + size.cx, y + size.cy)));
+        pCCM->addGlyph(FontDataCCM2::Glyph::create(unicodeChar, pCCM->getNumGlyphs(), *textureIdx, prespace, width, advance, FontDataCCM2::TexRegion::create(x, y, x + size.cx, y + size.cy)));
 
         char buf[256];
         sprintf_s(buf, "code=%d, textureId=%d, prespace=%d, width=%d, advance=%d, top=(%d, %d), bottom=(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
@@ -330,7 +330,7 @@ bool WriteGlyphsToBitmapCharList(HDC memDC, int* textureIdx, int kerning, const 
     return true;
 }
 
-bool WriteGlyphsToBitmap(int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, DLFontData::DLFontDataCCM2* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
+bool WriteGlyphsToBitmap(int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, FontDataCCM2::FontDataCCM2* pCCM, WCHAR* startChar, WCHAR* endChar, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     HDC memDC = CreateCompatibleDC(nullptr);
     SetBkMode(memDC, TRANSPARENT);
@@ -399,7 +399,7 @@ bool WriteGlyphsToBitmap(int* textureIdx, int kerning, const char* filename, std
         int width = size.cx;
         int advance = width + kerning;
 
-        pCCM->addGlyph(DLFontData::Glyph::create(unicodeChar, pCCM->getNumGlyphs(), *textureIdx, prespace, width, advance, DLFontData::TexRegion::create(x, y, x + size.cx, y + size.cy)));
+        pCCM->addGlyph(FontDataCCM2::Glyph::create(unicodeChar, pCCM->getNumGlyphs(), *textureIdx, prespace, width, advance, FontDataCCM2::TexRegion::create(x, y, x + size.cx, y + size.cy)));
 
         char buf[256];
         sprintf_s(buf, "code=%d, textureId=%d, prespace=%d, width=%d, advance=%d, top=(%d, %d), bottom=(%d, %d)\n", unicodeChar, *textureIdx, prespace, width, advance, x, y, x + size.cx, y + size.cy);
@@ -450,7 +450,7 @@ bool WriteGlyphsToBitmap(int* textureIdx, int kerning, const char* filename, std
     return true;
 }
 
-bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, DLFontData::DLFontDataCCM2* pCCM, const char* fontname, int size, bool is_bold, bool is_italic)
+bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, int kerning, const char* filename, std::ofstream* layoutFile, FontDataCCM2::FontDataCCM2* pCCM, const char* fontname, int size, bool is_bold, bool is_italic)
 {
     while (startChar < endChar)
     {
@@ -468,7 +468,7 @@ bool GenerateBitmapSubset(WCHAR startChar, WCHAR endChar, int* textureIdx, int k
 
 void CCM2Test()
 {
-	DLFontData::DLFontDataCCM2* fontData = DLFontData::DLFontDataCCM2::loadFile(L"Resource\\test.ccm");
+	FontDataCCM2::FontDataCCM2* fontData = FontDataCCM2::FontDataCCM2::loadFile(L"Resource\\test.ccm");
 
 	if (fontData == nullptr || !fontData->getInitStatus())
 		g_log->debugMessage(MsgLevel_Info, "Failed to load test ccm file");
@@ -597,7 +597,7 @@ int main(int argc, char** argv)
 
     g_log->debugMessage(MsgLevel_Info, "Generating CCM2 file %s\n", ccm_name);
 
-    DLFontData::DLFontDataCCM2* pCCM2 = DLFontData::DLFontDataCCM2::create(tm.tmHeight, TEXTURE_SIZE);
+    FontDataCCM2::FontDataCCM2* pCCM2 = FontDataCCM2::FontDataCCM2::create(tm.tmHeight, TEXTURE_SIZE);
 
     while (start < charList.size())
     {

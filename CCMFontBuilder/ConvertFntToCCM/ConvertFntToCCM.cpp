@@ -9,14 +9,14 @@
 
 RLog* g_log;
 
-DLFontData::DLFontDataCCM2* convertFntToCCM(const fnt::Font& fnt)
+FontDataCCM2::FontDataCCM2* convertFntToCCM(const fnt::Font& fnt)
 {
     g_log->debugMessage(MsgLevel_Info, "Creating ccm file from fnt xml...\n");
 
     if (fnt.getCommon().getScaleH() != fnt.getCommon().getScaleW())
         return nullptr;
 
-    DLFontData::DLFontDataCCM2* pCCM = DLFontData::DLFontDataCCM2::create(fnt.getCommon().getLineHeight(), fnt.getCommon().getScaleH());
+    FontDataCCM2::FontDataCCM2* pCCM = FontDataCCM2::FontDataCCM2::create(fnt.getCommon().getLineHeight(), fnt.getCommon().getScaleH());
 
     if (pCCM == nullptr || !pCCM->getInitStatus())
     {
@@ -28,7 +28,7 @@ DLFontData::DLFontDataCCM2* convertFntToCCM(const fnt::Font& fnt)
     {
 		int charId = ch.getId();
 
-        DLFontData::TexRegion* pTexRegion = DLFontData::TexRegion::create(ch.getX(), ch.getY(), ch.getX() + ch.getWidth(), ch.getY() + ch.getHeight());
+        FontDataCCM2::TexRegion* pTexRegion = FontDataCCM2::TexRegion::create(ch.getX(), ch.getY(), ch.getX() + ch.getWidth(), ch.getY() + ch.getHeight());
         if (pTexRegion == nullptr)
         {
             g_log->debugMessage(MsgLevel_Error, "Failed to create TexRegion for char %d\n", charId);
@@ -36,7 +36,7 @@ DLFontData::DLFontDataCCM2* convertFntToCCM(const fnt::Font& fnt)
             return nullptr;
         }
 
-        DLFontData::Glyph* pGlyph = DLFontData::Glyph::create(charId, pCCM->getNumGlyphs(), ch.getPage(), ch.getXOffset(), ch.getWidth(), ch.getXAdvance(), pTexRegion);
+        FontDataCCM2::Glyph* pGlyph = FontDataCCM2::Glyph::create(charId, pCCM->getNumGlyphs(), ch.getPage(), ch.getXOffset(), ch.getWidth(), ch.getXAdvance(), pTexRegion);
         if (pGlyph == nullptr)
         {
             g_log->debugMessage(MsgLevel_Error, "Failed to create Glyph for char %d\n", charId);
@@ -125,7 +125,7 @@ int main(int argc, char** argv)
     }
 
     // Create and convert the fnt to ccm, then save it
-	DLFontData::DLFontDataCCM2* pCCM = convertFntToCCM(fnt);
+	FontDataCCM2::FontDataCCM2* pCCM = convertFntToCCM(fnt);
 
     if (pCCM == nullptr)
     {
