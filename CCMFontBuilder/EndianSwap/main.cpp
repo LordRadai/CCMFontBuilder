@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 
     const std::string fontname = argv[1];
     
-	DLFontData::DLFontDataCCM2* fontData = DLFontData::DLFontDataCCM2::loadFile(LPCWSTR(fontname.c_str()));
-	fontData->save(LPCWSTR((fontname + "_swapped").c_str()));
+	DLFontData::DLFontDataCCM2* fontData = DLFontData::DLFontDataCCM2::loadFile(RString::toWide(fontname.c_str()));
+	fontData->save(RString::toWide((fontname + "_swapped").c_str()));
 
     delete g_log;
     return 1;
