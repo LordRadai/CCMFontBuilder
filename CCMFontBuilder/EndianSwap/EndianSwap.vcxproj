@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{EF4C45CF-D472-496A-858B-163F32451A0F}</ProjectGuid>
-    <RootNamespace>CCMFontBuilder</RootNamespace>
+    <ProjectGuid>{eeffec43-c89f-4f90-acda-fcfad1020337}</ProjectGuid>
+    <RootNamespace>EndianSwap</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,15 +71,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\obj\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\bin\$(ProjectName)\</OutDir>
-    <ExcludePath>$(ExcludePath)</ExcludePath>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\obj\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)lib\$(Platform)\$(Configuration)\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\obj\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\bin\$(ProjectName)\</OutDir>
-    <ExcludePath>$(ExcludePath)</ExcludePath>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\obj\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)lib\$(Platform)\$(Configuration)\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -105,8 +103,6 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -138,34 +134,24 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Comctl32.lib;RCore.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ConvertFntToCCM.cpp" />
-    <ClCompile Include="fntxml\fntxml.cpp" />
-    <ClCompile Include="WitchyXML\WitchyXML.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="fntxml\fntxml.h" />
-    <ClInclude Include="WitchyXML\WitchyXML.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\directxtk_uwp.2025.3.21.2\build\native\directxtk_uwp.targets" Condition="Exists('..\packages\directxtk_uwp.2025.3.21.2\build\native\directxtk_uwp.targets')" />
-    <Import Project="..\packages\directxtex_uwp.2025.7.10.1\build\native\directxtex_uwp.targets" Condition="Exists('..\packages\directxtex_uwp.2025.7.10.1\build\native\directxtex_uwp.targets')" />
+    <Import Project="..\packages\directxtk_uwp.2025.7.10.1\build\native\directxtk_uwp.targets" Condition="Exists('..\packages\directxtk_uwp.2025.7.10.1\build\native\directxtk_uwp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\directxtk_uwp.2025.3.21.2\build\native\directxtk_uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_uwp.2025.3.21.2\build\native\directxtk_uwp.targets'))" />
-    <Error Condition="!Exists('..\packages\directxtex_uwp.2025.7.10.1\build\native\directxtex_uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtex_uwp.2025.7.10.1\build\native\directxtex_uwp.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtk_uwp.2025.7.10.1\build\native\directxtk_uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_uwp.2025.7.10.1\build\native\directxtk_uwp.targets'))" />
   </Target>
 </Project>
