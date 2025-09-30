@@ -14,21 +14,21 @@ int main(int argc, char** argv)
     }
 
     const std::string fontname = argv[1];
-    const std::string ccmVersion = argv[2];
+    const int ccmVersion = std::stoi(argv[2]);
 
-    if (ccmVersion != "ccm" && ccmVersion != "ccm2")
+    if (ccmVersion != 1 && ccmVersion != 2)
     {
-        g_log->debugMessage(MsgLevel_Error, "Error: <ccmVersion> must be either \"ccm\" or \"ccm2\"\n");
+        g_log->debugMessage(MsgLevel_Error, "Error: <ccmVersion> must be either \"1\" (ccm) or \"2\" (ccm2)\n");
         delete g_log;
         return 0;
 	}
 
-    if (ccmVersion == "ccm")
+    if (ccmVersion == 1)   
     {
         FontDataCCM::FontDataCCM* fontData = FontDataCCM::FontDataCCM::loadFile(RString::toWide(fontname.c_str()));
         fontData->save(RString::toWide((fontname + "_swapped").c_str()));
     }
-    else if (ccmVersion == "ccm2")
+    else if (ccmVersion == 2)
     {
         FontDataCCM2::FontDataCCM2* fontData = FontDataCCM2::FontDataCCM2::loadFile(RString::toWide(fontname.c_str()));
         fontData->save(RString::toWide((fontname + "_swapped").c_str()));
