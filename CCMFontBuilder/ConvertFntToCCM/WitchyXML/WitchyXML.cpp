@@ -10,6 +10,7 @@ namespace WitchyManifest
 		m_pDoc->InsertFirstChild(m_pDoc->NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\""));
 
 		tinyxml2::XMLElement* root = m_pDoc->NewElement(rootName);
+		root->SetAttribute("WitchyVersion", 2170000);
 
 		root->InsertNewChildElement("filename")->SetText(filename);
 
